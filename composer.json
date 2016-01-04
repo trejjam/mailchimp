@@ -1,0 +1,44 @@
+{
+	"name": "trejjam/mail-chimp",
+	"description": "[In progress] MailChimp client for Nette",
+	"keywords": [
+		"nette",
+		"mailChimp"
+	],
+	"license": [
+		"MIT"
+	],
+	"authors": [
+		{
+			"name": "Štěpán Riss"
+		},
+		{
+			"name": "Jan Trejbal"
+		}
+	],
+	"require": {
+		"php": ">=5.4",
+		"nette/di": "~2.3",
+		"trejjam/base-extension": "~0.5.0",
+		"guzzlehttp/guzzle": "^6.1"
+	},
+	"require-dev": {
+		"nette/tester": "@dev",
+		"nette/robot-loader": "~2.3",
+		"nette/bootstrap": "~2.3",
+		"tracy/tracy": "~2.3"
+	},
+	"autoload": {
+		"psr-4": {
+			"Trejjam\\MailChimp\\": "src/"
+		},
+		"classmap": [
+			"src/exceptions.php"
+		]
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "v0.6.x-dev"
+		}
+	}
+}
