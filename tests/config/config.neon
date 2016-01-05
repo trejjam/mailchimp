@@ -11,6 +11,8 @@ extensions:
 
 mailChimp:
 	apiKey: 'someApiKey123-us11'
-	list: 12
+	lists:
+		newsletter: foo123
+		user: 123
 
 services:

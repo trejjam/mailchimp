@@ -29,6 +29,10 @@ class DITest extends Tester\TestCase
 
 		$mailChimpExtension->setConfig([
 			'apiKey' => 'someApiKey123-us11',
+			'lists'  => [
+				'newsletter' => 'foo123',
+				'user'       => 123,
+			]
 		]);
 		$mailChimpExtension->setCompiler(new Mock\Compiler, 'container_' . __FUNCTION__);
 		$mailChimpConfig = $reflectionMethod->invoke($mailChimpExtension);
@@ -37,7 +41,10 @@ class DITest extends Tester\TestCase
 			'findDc' => TRUE,
 			'apiUrl' => 'https://us11.api.mailchimp.com/3.0/',
 			'apiKey' => 'someApiKey123-us11',
-			'list'   => NULL,
+			'lists'  => [
+				'newsletter' => 'foo123',
+				'user'       => 123,
+			],
 		], $mailChimpConfig);
 	}
 }

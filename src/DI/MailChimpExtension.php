@@ -26,7 +26,7 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 		'findDc' => TRUE,
 		'apiUrl' => 'https://%s.api.mailchimp.com/3.0/',
 		'apiKey' => NULL,
-		'list'   => NULL,  // list id from https://<dc>.api.mailchimp.com/playground/
+		'lists'  => [],  // list id from https://<dc>.api.mailchimp.com/playground/
 	];
 
 	protected $classesDefinition = [
@@ -50,7 +50,12 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 
 		Nette\Utils\Validators::assert($config['apiUrl'], 'string', 'apiUrl');
 		Nette\Utils\Validators::assert($config['apiKey'], 'string', 'apiKey');
-		Nette\Utils\Validators::assert($config['list'], 'string|integer|none', 'list');
+		Nette\Utils\Validators::assert($config['lists'], 'array', 'list');
+
+		foreach ($config['lists'] as $k => $v) {
+			Nette\Utils\Validators::assert($v, 'string|integer', $k);
+		}
+
 
 		if ($config['findDc']) {
 			$dc = Nette\Utils\Strings::match($config['apiKey'], '~-(us(?:\d+))$~');
