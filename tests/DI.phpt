@@ -34,7 +34,7 @@ class DITest extends Tester\TestCase
 				'user'       => 123,
 			]
 		]);
-		$mailChimpExtension->setCompiler(new Mock\Compiler, 'container_' . __FUNCTION__);
+		$mailChimpExtension->setCompiler(new Nette\DI\Compiler, 'container_' . __FUNCTION__);
 		$mailChimpConfig = $reflectionMethod->invoke($mailChimpExtension);
 
 		Assert::same([
