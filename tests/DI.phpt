@@ -2,50 +2,45 @@
 
 namespace Test;
 
-use Nette,
-	Tester,
-	Tester\Assert,
-	Trejjam\MailChimp;
+use Nette;
+use Tester;
+use Tester\Assert;
+use Trejjam\MailChimp;
+use Composer;
 
 $container = require __DIR__ . '/bootstrap.php';
 
-
 class DITest extends Tester\TestCase
 {
-	private $container;
-
-	function __construct(Nette\DI\Container $container)
-	{
-		$this->container = $container;
-	}
-
 	public function testConfig()
 	{
-		/** @var MailChimp\DI\MailChimpExtension $mailChimpExtension */
-		$mailChimpExtension = new MailChimp\DI\MailChimpExtension;
-		$reflection = new \ReflectionClass($mailChimpExtension);
-		$reflectionMethod = $reflection->getMethod('createConfig');
-		$reflectionMethod->setAccessible(TRUE);
+		$mailChimpExtension = new MailChimp\Tests\Mock\MailChimpExtension;
 
-		$mailChimpExtension->setConfig([
-			'apiKey' => 'someApiKey123-us11',
-			'lists'  => [
-				'newsletter' => 'foo123',
-				'user'       => 123,
+		$mailChimpExtension->setConfig(
+			[
+				'apiKey' => 'someApiKey123-us11',
+				'lists'  => [
+					'newsletter' => 'foo123',
+					'user'       => 123,
+				],
 			]
-		]);
-		$mailChimpExtension->setCompiler(new Nette\DI\Compiler, 'container_' . __FUNCTION__);
-		$mailChimpConfig = $reflectionMethod->invoke($mailChimpExtension);
+		);
 
-		Assert::same([
-			'findDc' => TRUE,
-			'apiUrl' => 'https://us11.api.mailchimp.com/3.0/',
-			'apiKey' => 'someApiKey123-us11',
-			'lists'  => [
-				'newsletter' => 'foo123',
-				'user'       => 123,
-			],
-		], $mailChimpConfig);
+		$mailChimpExtension->setCompiler(new Nette\DI\Compiler, 'container_' . __FUNCTION__);
+		$mailChimpConfig = $mailChimpExtension->createConfig();
+
+		Assert::same(
+			[
+				'findDc' => TRUE,
+				'apiUrl' => 'https://us11.api.mailchimp.com/3.0/',
+				'apiKey' => 'someApiKey123-us11',
+				'lists'  => [
+					'newsletter' => 'foo123',
+					'user'       => 123,
+				],
+				'http'   => ['client' => ['verify' => Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()]],
+			], $mailChimpConfig
+		);
 	}
 }
 

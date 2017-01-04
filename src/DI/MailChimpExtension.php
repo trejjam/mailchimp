@@ -8,8 +8,10 @@
 
 namespace Trejjam\MailChimp\DI;
 
-use Nette,
-	Trejjam;
+use GuzzleHttp;
+use Composer;
+use Nette;
+use Trejjam;
 
 /**
  * Class MailChimpExtension
@@ -27,15 +29,26 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 		'apiUrl' => 'https://%s.api.mailchimp.com/3.0/',
 		'apiKey' => NULL,
 		'lists'  => [],  // list id from https://<dc>.api.mailchimp.com/playground/
+		'http'   => [
+			'client' => [
+				'verify' => NULL, //NULL will be filled by Composer CA
+			],
+		],
 	];
 
 	protected $classesDefinition = [
-		//TODO define used class
+		'api'         => Trejjam\MailChimp\Api::class,
+		'http.client' => GuzzleHttp\Client::class,
 	];
 
 	protected $factoriesDefinition = [
 		//TODO define used factory (if necessary)
 	];
+
+	public function __construct()
+	{
+		$this->default['http']['client']['verify'] = Composer\CaBundle\CaBundle::getSystemCaRootBundlePath();
+	}
 
 	/**
 	 * Extract dc from apikey
@@ -56,7 +69,6 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 			Nette\Utils\Validators::assert($v, 'string|integer', $k);
 		}
 
-
 		if ($config['findDc']) {
 			$dc = Nette\Utils\Strings::match($config['apiKey'], '~-(us(?:\d+))$~');
 			$config['apiUrl'] = sprintf($config['apiUrl'], $dc[1]);
@@ -74,6 +86,19 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 		$config = $this->createConfig();
 
 		$classes = $this->getClasses();
+
+		$classes['http.client']->setArguments(
+			[
+				'config' => $config['http']['client'],
+			]
+		);
+		$classes['http.client']->setAutowired(FALSE);
+
+		$classes['api']->setArguments(
+			[
+				'httpClient' => $this->prefix('@http.client'),
+			]
+		);
 
 		//TODO add config values to service
 	}
