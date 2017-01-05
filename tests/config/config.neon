@@ -1,10 +1,11 @@
 parameters:
+	mailchimpApiKey: 'someApiKey123-us11'
 
 extensions:
 	trejjam.mailchimp: Trejjam\MailChimp\DI\MailChimpExtension
 
 trejjam.mailchimp:
-	apiKey: 'someApiKey123-us11'
+	apiKey: %mailchimpApiKey%
 	lists:
 		newsletter: foo123
 		user: 123

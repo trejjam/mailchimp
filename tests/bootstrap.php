@@ -9,7 +9,7 @@ if ( !class_exists('Tester\Assert')) {
 
 Tester\Environment::setup();
 
-$tempDir = __DIR__ . '/temp';
+$tempDir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'temp', Nette\Utils\Random::generate()]);
 
 if ( !file_exists($tempDir)) {
 	mkdir($tempDir);

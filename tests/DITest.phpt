@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Trejjam\MailChimp\Tests;
 
 use Nette;
 use Tester;
@@ -31,14 +31,16 @@ class DITest extends Tester\TestCase
 
 		Assert::same(
 			[
-				'findDc' => TRUE,
-				'apiUrl' => 'https://us11.api.mailchimp.com/3.0/',
-				'apiKey' => 'someApiKey123-us11',
-				'lists'  => [
+				'findDataCenter' => TRUE,
+				'apiUrl'         => 'https://us11.api.mailchimp.com/3.0/',
+				'apiKey'         => 'someApiKey123-us11',
+				'lists'          => [
 					'newsletter' => 'foo123',
 					'user'       => 123,
 				],
-				'http'   => ['client' => ['verify' => Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()]],
+				'http'           => [
+					'client' => ['verify' => Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()],
+				],
 			], $mailChimpConfig
 		);
 	}

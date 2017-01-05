@@ -25,11 +25,11 @@ use Trejjam;
 class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 {
 	protected $default = [
-		'findDc' => TRUE,
-		'apiUrl' => 'https://%s.api.mailchimp.com/3.0/',
-		'apiKey' => NULL,
-		'lists'  => [],  // list id from https://<dc>.api.mailchimp.com/playground/
-		'http'   => [
+		'findDataCenter' => TRUE,
+		'apiUrl'         => 'https://%s.api.mailchimp.com/%s/',
+		'apiKey'         => NULL,
+		'lists'          => [],  // list id from https://<dc>.api.mailchimp.com/playground/
+		'http'           => [
 			'client' => [
 				'verify' => NULL, //NULL will be filled by Composer CA
 			],
@@ -37,12 +37,15 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 	];
 
 	protected $classesDefinition = [
-		'api'         => Trejjam\MailChimp\Api::class,
 		'http.client' => GuzzleHttp\Client::class,
+		'request'     => Trejjam\MailChimp\Request::class,
+		'context'     => Trejjam\MailChimp\Context::class,
+		'group.root'  => Trejjam\MailChimp\Group\Root::class,
+		'group.lists' => Trejjam\MailChimp\Group\Lists::class,
 	];
 
 	protected $factoriesDefinition = [
-		//TODO define used factory (if necessary)
+
 	];
 
 	public function __construct()
@@ -69,9 +72,9 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 			Nette\Utils\Validators::assert($v, 'string|integer', $k);
 		}
 
-		if ($config['findDc']) {
-			$dc = Nette\Utils\Strings::match($config['apiKey'], '~-(us(?:\d+))$~');
-			$config['apiUrl'] = sprintf($config['apiUrl'], $dc[1]);
+		if ($config['findDataCenter']) {
+			$accountDataCenter = Nette\Utils\Strings::match($config['apiKey'], '~-(us(?:\d+))$~');
+			$config['apiUrl'] = sprintf($config['apiUrl'], $accountDataCenter[1], Trejjam\MailChimp\Request::VERSION);
 		}
 
 		Nette\Utils\Validators::assert($config['apiUrl'], 'string', 'apiUrl');
@@ -91,15 +94,14 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 			[
 				'config' => $config['http']['client'],
 			]
-		);
-		$classes['http.client']->setAutowired(FALSE);
+		)->setAutowired(FALSE);
 
-		$classes['api']->setArguments(
+		$classes['request']->setArguments(
 			[
 				'httpClient' => $this->prefix('@http.client'),
+				'apiUrl'     => $config['apiUrl'],
+				'apiKey'     => $config['apiKey'],
 			]
 		);
-
-		//TODO add config values to service
 	}
 }
