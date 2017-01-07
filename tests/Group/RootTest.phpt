@@ -18,7 +18,7 @@ class RootTest extends Tester\TestCase
 		$this->container = $container;
 	}
 
-	public function testConfig()
+	public function testGetAll()
 	{
 		/** @var MailChimp\Group\Root $groupRoot */
 		$groupRoot = $this->container->getByType(MailChimp\Group\Root::class);
@@ -28,6 +28,10 @@ class RootTest extends Tester\TestCase
 		$rootEntity = $groupRoot->get();
 		Assert::type(MailChimp\Entity\Root::class, $rootEntity);
 		Assert::notSame('', $rootEntity->last_login);
+
+		$contactEntity = $rootEntity->getContact();
+		Assert::type(MailChimp\Entity\Contact::class, $contactEntity);
+		Assert::notSame(NULL, $contactEntity->company);
 	}
 }
 

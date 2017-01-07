@@ -17,7 +17,6 @@ use Trejjam\MailChimp\Entity;
  * @property-read string $email
  * @property-read string $username
  * @property-read string $role
- * @property-read        $contact
  * @property-read string $pro_enabled
  * @property-read string $last_login
  * @property-read string $total_subscribers
@@ -26,8 +25,10 @@ use Trejjam\MailChimp\Entity;
 class Root extends Schematic\Entry
 {
 	use Entity\LinkTrait;
+	use Entity\ContactTrait;
 
 	protected static $associations = [
 		'_links[]' => Entity\Link::class,
+		'contact'  => Entity\Contact::class,
 	];
 }

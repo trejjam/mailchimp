@@ -45,7 +45,7 @@ class Request
 	{
 		$mergedRequestOptions = array_merge_recursive(
 			[
-				'auth' => [self::API_USER, $this->apiKey],
+				GuzzleHttp\RequestOptions::AUTH => [self::API_USER, $this->apiKey],
 			], $requestOptions
 		);
 

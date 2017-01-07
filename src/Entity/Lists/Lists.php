@@ -20,7 +20,8 @@ class Lists extends Schematic\Entry
 	use Entity\LinkTrait;
 
 	protected static $associations = [
-		'lists[]' => ListItem::class,
+		'_links[]' => Entity\Link::class,
+		'lists[]'  => ListItem::class,
 	];
 
 	/**
