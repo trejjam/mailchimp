@@ -28,10 +28,7 @@
 	"autoload": {
 		"psr-4": {
 			"Trejjam\\MailChimp\\": "src/"
-		},
-		"classmap": [
-			"src/exceptions.php"
-		]
+		}
 	},
 	"extra": {
 		"branch-alias": {

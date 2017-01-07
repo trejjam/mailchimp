@@ -26,9 +26,14 @@ class RequestTest extends Tester\TestCase
 		Assert::type(MailChimp\Request::class, $api);
 
 		/** @var \Trejjam\MailChimp\Entity\Root $rootResponse */
+		$rootResponseArray = $api->get('/');
+		$rootResponseObject = new MailChimp\Entity\Root($rootResponseArray);
+
+		/** @var \Trejjam\MailChimp\Entity\Root $rootResponse */
 		$rootResponse = $api->get('/', MailChimp\Entity\Root::class);
 
 		Assert::type(MailChimp\Entity\Root::class, $rootResponse);
+		Assert::same($rootResponseObject->account_id, $rootResponse->account_id);
 		Assert::notSame('', $rootResponse->last_login);
 
 		/** @var MailChimp\Entity\Link $firstLink */

@@ -24,11 +24,17 @@ class Context
 		$this->lists = $lists;
 	}
 
+	/**
+	 * @return Group\Root
+	 */
 	public function getRootGroup()
 	{
 		return $this->root;
 	}
 
+	/**
+	 * @return Group\Lists
+	 */
 	public function getListsGroup()
 	{
 		return $this->lists;

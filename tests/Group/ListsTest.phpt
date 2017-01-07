@@ -69,6 +69,10 @@ class ListsTest extends Tester\TestCase
 		/** @var MailChimp\Group\Lists $groupLists */
 		$groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
 
+		Assert::throws(function () use ($groupLists) {
+			$groupLists->getMembers('not_exist_id');
+		}, MailChimp\Exception\ListNotFoundException::class);
+
 		$listsEntity = $groupLists->getAll();
 		if ($listsEntity->getLists()->count() > 0) {
 			$_listEntity = $listsEntity->getLists()->current();
