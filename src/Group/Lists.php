@@ -10,7 +10,8 @@ use Schematic;
 
 class Lists
 {
-	const GROUP_PREFIX = '/lists';
+	const GROUP_PREFIX        = '/lists';
+	const GROUP_MEMBER_PREFIX = '/members';
 
 	/**
 	 * @var Trejjam\MailChimp\Request
@@ -32,7 +33,7 @@ class Lists
 	}
 
 	/**
-	 * @param string|null $listId
+	 * @param string $listId
 	 *
 	 * @return Trejjam\MailChimp\Entity\Lists\ListItem|Schematic\Entry
 	 * @throws Nette\Utils\JsonException
@@ -41,6 +42,22 @@ class Lists
 	{
 		try {
 			return $this->apiRequest->get($this->getEndpointPath($listId), Trejjam\MailChimp\Entity\Lists\ListItem::class);
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			throw new MailChimp\Exception\ListNotFoundException("List '{$listId}' not found", $clientException);
+		}
+	}
+
+	/**
+	 * @param string $listId
+	 *
+	 * @return MailChimp\Entity\Lists\Member\Lists|Schematic\Entry
+	 * @throws Nette\Utils\JsonException
+	 */
+	public function getMembers($listId)
+	{
+		try {
+			return $this->apiRequest->get($this->getEndpointPath($listId) . self::GROUP_MEMBER_PREFIX, MailChimp\Entity\Lists\Member\Lists::class);
 		}
 		catch (GuzzleHttp\Exception\ClientException $clientException) {
 			throw new MailChimp\Exception\ListNotFoundException("List '{$listId}' not found", $clientException);

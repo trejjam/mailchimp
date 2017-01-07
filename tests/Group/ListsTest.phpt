@@ -63,6 +63,32 @@ class ListsTest extends Tester\TestCase
 			Assert::type(MailChimp\Entity\Link::class, $listEntity->getLinks()->current());
 		}
 	}
+
+	public function testGetEntityMembers()
+	{
+		/** @var MailChimp\Group\Lists $groupLists */
+		$groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
+
+		$listsEntity = $groupLists->getAll();
+		if ($listsEntity->getLists()->count() > 0) {
+			$_listEntity = $listsEntity->getLists()->current();
+
+			$listMembers = $groupLists->getMembers($_listEntity->id);
+			Assert::type(MailChimp\Entity\Lists\Member\Lists::class, $listMembers);
+			Assert::type(MailChimp\Entity\Link::class, $listMembers->getLinks()->current());
+			Assert::same($_listEntity->id, $listMembers->list_id);
+
+			$listMemberItems = $listMembers->getMembers();
+
+			if ($listMemberItems->count() > 0) {
+				/** @var MailChimp\Entity\Lists\Member\MemberItem $listMemberItem */
+				$listMemberItem = $listMemberItems->current();
+				Assert::type(MailChimp\Entity\Lists\Member\MemberItem::class, $listMemberItem);
+				Assert::type(MailChimp\Entity\Link::class, $listMemberItem->getLinks()->current());
+				Assert::same($_listEntity->id, $listMemberItem->list_id);
+			}
+		}
+	}
 }
 
 $test = new ListsTest($container);
