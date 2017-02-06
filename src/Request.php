@@ -53,7 +53,14 @@ class Request
 			$method, $this->apiUrl . $endpointPath, $mergedRequestOptions
 		);
 
-		$returnArray = Nette\Utils\Json::decode($response->getBody(), Nette\Utils\Json::FORCE_ARRAY);
+		if ($response->getStatusCode() !== 200) {
+			throw (new Trejjam\MailChimp\Exception\RequestException(
+				$response->getReasonPhrase(),
+				$response->getStatusCode()
+			))->setResponse($response);
+		}
+
+		$returnArray = Nette\Utils\Json::decode($response->getBody()->getContents(), Nette\Utils\Json::FORCE_ARRAY);
 
 		if (empty($endpointClass)) {
 			return $returnArray;
@@ -63,13 +70,40 @@ class Request
 	}
 
 	/**
-	 * @param $endpointPath
-	 * @param $endpointClass
+	 * @param string $endpointPath
+	 * @param string $endpointClass
 	 *
 	 * @return array|Entry|mixed
 	 * @throws Nette\Utils\JsonException
 	 */
 	public function get($endpointPath, $endpointClass = NULL)
+	{
+		return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass);
+	}
+
+	/**
+	 * @param string $endpointPath
+	 * @param array  $body
+	 * @param string $endpointClass
+	 *
+	 * @return array|mixed|Entry
+	 * @throws Nette\Utils\JsonException
+	 */
+	public function put($endpointPath, array $body, $endpointClass = NULL)
+	{
+		return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+			GuzzleHttp\RequestOptions::BODY => Nette\Utils\Json::encode($body),
+		]);
+	}
+
+	/**
+	 * @param string $endpointPath
+	 * @param string $endpointClass
+	 *
+	 * @return array|Entry|mixed
+	 * @throws Nette\Utils\JsonException
+	 */
+	public function delete($endpointPath, $endpointClass = NULL)
 	{
 		return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass);
 	}

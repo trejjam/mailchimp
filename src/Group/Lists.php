@@ -10,7 +10,7 @@ use Schematic;
 
 class Lists
 {
-	const GROUP_PREFIX        = '/lists';
+	const GROUP_PREFIX        = 'lists';
 	const GROUP_MEMBER_PREFIX = '/members';
 
 	/**
@@ -37,6 +37,7 @@ class Lists
 	 *
 	 * @return Trejjam\MailChimp\Entity\Lists\ListItem|Schematic\Entry
 	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\ListNotFoundException
 	 */
 	public function get($listId)
 	{
@@ -53,6 +54,7 @@ class Lists
 	 *
 	 * @return MailChimp\Entity\Lists\Member\Lists|Schematic\Entry
 	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\ListNotFoundException
 	 */
 	public function getMembers($listId)
 	{
@@ -64,8 +66,59 @@ class Lists
 		}
 	}
 
+	/**
+	 * @param string $listId
+	 * @param string $memberHash
+	 *
+	 * @return MailChimp\Entity\Lists\Member\MemberItem
+	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\MemberNotFoundException
+	 */
+	public function getMember($listId, $memberHash)
+	{
+		try {
+			return $this->apiRequest->get($this->getMemberEndpointPath($listId, $memberHash), MailChimp\Entity\Lists\Member\MemberItem::class);
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			throw new MailChimp\Exception\MemberNotFoundException("Member '{$memberHash}' not found in list '{$listId}' not found", $clientException);
+		}
+	}
+
+	public function addMember(MailChimp\Entity\Lists\Member\MemberItemPut $memberItem)
+	{
+		try {
+			return $this->apiRequest->put($this->getMemberEndpointPath($memberItem->list_id, $memberItem->id), $memberItem->toArray(), MailChimp\Entity\Lists\Member\MemberItem::class);
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			throw new MailChimp\Exception\MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
+		}
+	}
+
+	public function removeMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
+	{
+		try {
+			return $this->apiRequest->delete($this->getMemberEndpointPath($memberItem->list_id, $memberItem->id));
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			throw new MailChimp\Exception\MemberNotFoundException("Member '{$memberItem->id}' not found in list '{$memberItem->list_id}' not found", $clientException);
+		}
+		catch (MailChimp\Exception\RequestException $requestException) {
+			if ($requestException->getCode() === 204) {
+				return TRUE;
+			}
+			else {
+				throw $requestException;
+			}
+		}
+	}
+
 	private function getEndpointPath($listId)
 	{
 		return self::GROUP_PREFIX . "/{$listId}";
+	}
+
+	private function getMemberEndpointPath($listId, $memberHash)
+	{
+		return $this->getEndpointPath($listId) . self::GROUP_MEMBER_PREFIX . "/{$memberHash}";
 	}
 }
