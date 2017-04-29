@@ -7,10 +7,6 @@ use Trejjam;
 use Trejjam\MailChimp\Entity;
 
 /**
- * Class MemberItem
- *
- * @package Trejjam\MailChimp\Entity\Lists\Member
- *
  * @property-read string $id
  * @property-read string $email_address
  * @property-read string $unique_email_id

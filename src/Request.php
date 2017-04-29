@@ -98,6 +98,21 @@ class Request
 
 	/**
 	 * @param string $endpointPath
+	 * @param array  $body
+	 * @param string $endpointClass
+	 *
+	 * @return array|mixed|Entry
+	 * @throws Nette\Utils\JsonException
+	 */
+	public function post($endpointPath, array $body, $endpointClass = NULL)
+	{
+		return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+			GuzzleHttp\RequestOptions::BODY => Nette\Utils\Json::encode($body),
+		]);
+	}
+
+	/**
+	 * @param string $endpointPath
 	 * @param string $endpointClass
 	 *
 	 * @return array|Entry|mixed

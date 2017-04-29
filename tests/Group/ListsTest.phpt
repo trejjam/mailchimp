@@ -201,9 +201,89 @@ class ListsTest extends Tester\TestCase
 			Assert::throws(function () use ($groupLists, $memberItem1) {
 				$groupLists->getMember($memberItem1->list_id, $memberItem1->id);
 			}, MailChimp\Exception\MemberNotFoundException::class, "Member '{$memberItem1->id}' not found in list '{$memberItem1->list_id}' not found");
+
 			Assert::throws(function () use ($groupLists, $memberItem2) {
 				$groupLists->getMember($memberItem2->list_id, $memberItem2->id);
 			}, MailChimp\Exception\MemberNotFoundException::class, "Member '{$memberItem2->id}' not found in list '{$memberItem2->list_id}' not found");
+		}
+	}
+
+	public function testGetEntitySegments()
+	{
+		/** @var MailChimp\Group\Lists $groupLists */
+		$groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
+
+		Assert::throws(function () use ($groupLists) {
+			$groupLists->getSegments('not_exist_id');
+		}, MailChimp\Exception\ListNotFoundException::class);
+
+		$listsEntity = $groupLists->getAll();
+		if ($listsEntity->getLists()->count() > 0) {
+			/** @var MailChimp\Entity\Lists\ListItem $_listEntity */
+			$_listEntity = $listsEntity->getLists()->current();
+
+			$listSegments = $groupLists->getSegments($_listEntity->id);
+			Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
+			Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()->current());
+			Assert::same($_listEntity->id, $listSegments->list_id);
+
+			$listSegmentItems = $listSegments->getSegments();
+
+			if ($listSegmentItems->count() > 0) {
+				/** @var MailChimp\Entity\Lists\Segment\Segment $listSegmentItem */
+				$listSegmentItem = $listSegmentItems->current();
+
+				Assert::type(MailChimp\Entity\Lists\Segment\Segment::class, $listSegmentItem);
+				Assert::type(MailChimp\Entity\Link::class, $listSegmentItem->getLinks()->current());
+				Assert::same($_listEntity->id, $listSegmentItem->list_id);
+
+				$segment = $groupLists->getSegment($_listEntity->id, $listSegmentItem->id);
+
+				Assert::same($listSegmentItem->id, $segment->id);
+			}
+		}
+	}
+
+	public function testAddSegmentMember()
+	{
+		/** @var MailChimp\Group\Lists $groupLists */
+		$groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
+
+		$listsEntity = $groupLists->getAll();
+		if ($listsEntity->getLists()->count() > 0) {
+			/** @var MailChimp\Entity\Lists\ListItem $_listEntity */
+			$_listEntity = $listsEntity->getLists()->current();
+
+			$listSegments = $groupLists->getSegments($_listEntity->id);
+			Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
+			Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()->current());
+			Assert::same($_listEntity->id, $listSegments->list_id);
+
+			$listSegmentItems = $listSegments->getSegments();
+
+			if ($listSegmentItems->count() > 0) {
+				/** @var MailChimp\Entity\Lists\Segment\Segment $listSegmentItem */
+				$listSegmentItem = $listSegmentItems->current();
+
+				$memberItem = MailChimp\Entity\Lists\Member\MemberItem::create(
+					'jan+mailchimptest5@trejbal.land',
+					$_listEntity->id,
+					MailChimp\Entity\Lists\Member\MemberItem::STATUS_SUBSCRIBED
+				);
+				$memberItem->setMergeFields(
+					[
+						'FNAME' => 'Jan',
+						'LNAME' => 'Trejbal',
+					]
+				);
+				$groupLists->addMember($memberItem);
+
+				$segmentMemberItem = $groupLists->addSegmentMember($listSegmentItem->id, $memberItem);
+
+				Assert::same($memberItem->id, $segmentMemberItem->id);
+				Assert::same($memberItem->email_address, $segmentMemberItem->email_address);
+				dump([$segmentMemberItem, $memberItem]);
+			}
 		}
 	}
 }

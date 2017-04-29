@@ -10,8 +10,9 @@ use Schematic;
 
 class Lists
 {
-	const GROUP_PREFIX        = 'lists';
-	const GROUP_MEMBER_PREFIX = '/members';
+	const GROUP_PREFIX         = 'lists';
+	const GROUP_MEMBER_PREFIX  = '/members';
+	const GROUP_SEGMENT_PREFIX = '/segments';
 
 	/**
 	 * @var Trejjam\MailChimp\Request
@@ -84,6 +85,12 @@ class Lists
 		}
 	}
 
+	/**
+	 * @param MailChimp\Entity\Lists\Member\MemberItem $memberItem
+	 *
+	 * @return MailChimp\Entity\Lists\Member\MemberItem|Schematic\Entry
+	 * @throws Nette\Utils\JsonException
+	 */
 	public function addMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
 	{
 		try {
@@ -118,6 +125,61 @@ class Lists
 		}
 	}
 
+	/**
+	 * @param $listId
+	 *
+	 * @return Schematic\Entry|MailChimp\Entity\Lists\Segment\Lists
+	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\ListNotFoundException
+	 */
+	public function getSegments($listId)
+	{
+		try {
+			return $this->apiRequest->get($this->getEndpointPath($listId) . self::GROUP_SEGMENT_PREFIX, MailChimp\Entity\Lists\Segment\Lists::class);
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			throw new MailChimp\Exception\ListNotFoundException("List '{$listId}' not found", $clientException);
+		}
+	}
+
+	/**
+	 * @param string $listId
+	 * @param int    $segmentId
+	 *
+	 * @return Schematic\Entry|MailChimp\Entity\Lists\Segment\Segment
+	 * @throws Nette\Utils\JsonException
+	 */
+	public function getSegment($listId, $segmentId)
+	{
+		try {
+			return $this->apiRequest->get($this->getSegmentEndpointPath($listId, $segmentId), MailChimp\Entity\Lists\Segment\Segment::class);
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			throw new MailChimp\Exception\ListNotFoundException("Segment '{$segmentId}' not found in list '{$listId}' not found", $clientException);
+		}
+	}
+
+	/**
+	 * @param int                                      $segmentId
+	 * @param MailChimp\Entity\Lists\Member\MemberItem $memberItem
+	 *
+	 * @return Schematic\Entry|MailChimp\Entity\Lists\Member\MemberItem
+	 * @throws Nette\Utils\JsonException
+	 */
+	public function addSegmentMember($segmentId, MailChimp\Entity\Lists\Member\MemberItem $memberItem)
+	{
+		try {
+			return $this->apiRequest->post(
+				$this->getSegmentEndpointPath($memberItem->list_id, $segmentId) . self::GROUP_MEMBER_PREFIX,
+				['email_address' => $memberItem->email_address, 'status' => 'subscribed'], MailChimp\Entity\Lists\Member\MemberItem::class
+			);
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			\Tracy\Debugger::getLogger()->log($clientException);
+			throw new MailChimp\Exception\MemberNotFoundException("Member '{$memberItem->id}' not added into segment '{$segmentId}'", $clientException);
+		}
+	}
+
 	private function getEndpointPath($listId)
 	{
 		return self::GROUP_PREFIX . "/{$listId}";
@@ -126,5 +188,10 @@ class Lists
 	private function getMemberEndpointPath($listId, $memberHash)
 	{
 		return $this->getEndpointPath($listId) . self::GROUP_MEMBER_PREFIX . "/{$memberHash}";
+	}
+
+	private function getSegmentEndpointPath($listId, $segmentId)
+	{
+		return $this->getEndpointPath($listId) . self::GROUP_SEGMENT_PREFIX . "/{$segmentId}";
 	}
 }
