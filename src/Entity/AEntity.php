@@ -78,4 +78,25 @@ abstract class AEntity
 
 		return $out;
 	}
+
+	public function getUpdated()
+	{
+		$out = [];
+
+		foreach ($this->data as $key => $entityData) {
+			if (
+				//or handle nested?
+				$entityData instanceof AEntity
+				|| $entityData instanceof Entries
+			) {
+				continue;
+			}
+
+			if ($entityData !== $this->initData[$key]) {
+				$out[$key] = $entityData;
+			}
+		}
+
+		return $out;
+	}
 }

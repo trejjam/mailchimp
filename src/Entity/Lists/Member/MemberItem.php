@@ -59,6 +59,18 @@ class MemberItem extends Entity\AEntity
 	];
 
 	/**
+	 * @param string $emailAddress
+	 *
+	 * @return static
+	 */
+	public function setEmailAddress($emailAddress)
+	{
+		$this->email_address = $emailAddress;
+
+		return $this;
+	}
+
+	/**
 	 * @param 'html'|'text' $emailType
 	 */
 	public function setEmailType($emailType)

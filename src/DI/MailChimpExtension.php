@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Jan
- * Date: 26. 10. 2014
- * Time: 17:38
- */
 
 namespace Trejjam\MailChimp\DI;
 

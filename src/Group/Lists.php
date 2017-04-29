@@ -88,7 +88,7 @@ class Lists
 	/**
 	 * @param MailChimp\Entity\Lists\Member\MemberItem $memberItem
 	 *
-	 * @return MailChimp\Entity\Lists\Member\MemberItem|Schematic\Entry
+	 * @return MailChimp\Entity\Lists\Member\MemberItem
 	 * @throws Nette\Utils\JsonException
 	 */
 	public function addMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
@@ -107,6 +107,34 @@ class Lists
 		}
 	}
 
+	/**
+	 * @param MailChimp\Entity\Lists\Member\MemberItem $memberItem
+	 *
+	 * @return MailChimp\Entity\Lists\Member\MemberItem
+	 * @throws Nette\Utils\JsonException
+	 */
+	public function updateMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
+	{
+		try {
+			return $this->apiRequest->patch(
+				$this->getMemberEndpointPath(
+					$memberItem->list_id,
+					$memberItem->id
+				),
+				$memberItem->getUpdated(), MailChimp\Entity\Lists\Member\MemberItem::class
+			);
+		}
+		catch (GuzzleHttp\Exception\ClientException $clientException) {
+			throw new MailChimp\Exception\MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
+		}
+	}
+
+	/**
+	 * @param MailChimp\Entity\Lists\Member\MemberItem $memberItem
+	 *
+	 * @return array|bool
+	 * @throws Nette\Utils\JsonException
+	 */
 	public function removeMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
 	{
 		try {

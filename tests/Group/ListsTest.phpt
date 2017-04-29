@@ -160,10 +160,13 @@ class ListsTest extends Tester\TestCase
 			/** @var MailChimp\Entity\Lists\ListItem $_listEntity */
 			$_listEntity = $listsEntity->getLists()->current();
 
+			$memberEmail1 = 'jan+mailchimptest42@trejbal.land';
+			$newMemberEmail1 = 'jan+mailchimptest52@trejbal.land';
+
 			$memberItem1 = MailChimp\Entity\Lists\Member\MemberItem::create(
-				'honza+mailchimptest@trejbal.land',
+				$memberEmail1,
 				$_listEntity->id,
-				MailChimp\Entity\Lists\Member\MemberItem::STATUS_UNSUBSCRIBED
+				MailChimp\Entity\Lists\Member\MemberItem::STATUS_SUBSCRIBED
 			);
 			$memberItem1->setMergeFields(
 				[
@@ -176,10 +179,20 @@ class ListsTest extends Tester\TestCase
 			Assert::same($memberItem1->merge_fields[MailChimp\Entity\Lists\Member\MemberItem::MERGE_FIELDS_FNAME], $memberItemAdd1->merge_fields[MailChimp\Entity\Lists\Member\MemberItem::MERGE_FIELDS_FNAME]);
 			Assert::same($memberItem1->merge_fields[MailChimp\Entity\Lists\Member\MemberItem::MERGE_FIELDS_LNAME], $memberItemAdd1->merge_fields[MailChimp\Entity\Lists\Member\MemberItem::MERGE_FIELDS_LNAME]);
 
+			$memberItemAdd1->setEmailAddress($newMemberEmail1);
+			$updatedMemberItemAdd1 = $groupLists->updateMember($memberItemAdd1);
+
+			Assert::same($newMemberEmail1, $updatedMemberItemAdd1->email_address);
+
+			$updatedMemberItemAdd1->setEmailAddress($memberEmail1);
+			$_updatedMemberItemAdd1 = $groupLists->updateMember($updatedMemberItemAdd1);
+
+			Assert::same($memberEmail1, $_updatedMemberItemAdd1->email_address);
+
 			$memberItem2 = MailChimp\Entity\Lists\Member\MemberItem::create(
 				'honza+mailchimptest8@trejbal.land',
 				$_listEntity->id,
-				MailChimp\Entity\Lists\Member\MemberItem::STATUS_SUBSCRIBED
+				MailChimp\Entity\Lists\Member\MemberItem::STATUS_UNSUBSCRIBED
 			);
 			$memberItemAdd2 = $groupLists->addMember($memberItem2);
 			Assert::same($memberItem2->email_address, $memberItemAdd2->email_address);
