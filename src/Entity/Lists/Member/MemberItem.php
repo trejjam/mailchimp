@@ -3,7 +3,6 @@
 namespace Trejjam\MailChimp\Entity\Lists\Member;
 
 use Nette;
-use Schematic;
 use Trejjam;
 use Trejjam\MailChimp\Entity;
 
@@ -31,7 +30,7 @@ use Trejjam\MailChimp\Entity;
  * @property-read        $location
  * @property-read string $list_id
  */
-class MemberItem
+class MemberItem extends Entity\AEntity
 {
 	use Entity\LinkTrait;
 
@@ -44,55 +43,80 @@ class MemberItem
 	const MERGE_FIELDS_FNAME = 'FNAME';
 	const MERGE_FIELDS_LNAME = 'LNAME';
 
-	protected $initializedData = [];
+	protected $readOnly = [
+		'unique_email_id'  => TRUE,
+		'stats'            => TRUE,
+		'ip_signup'        => TRUE,
+		'timestamp_signup' => TRUE,
+		'ip_opt'           => TRUE,
+		'timestamp_opt'    => TRUE,
+		'member_rating'    => TRUE,
+		'last_changed'     => TRUE,
+		'email_client'     => TRUE,
+		'last_note'        => TRUE,
+		'list_id'          => TRUE,
+		'_links'           => TRUE,
+	];
 
 	protected $associations = [
 		'_links' => [Entity\Link::class],
 	];
 
 	/**
-	 * @var array
-	 */
-	protected $data;
-
-	public function __construct(array $data)
-	{
-		$this->data = $data;
-	}
-
-	public function __get($name)
-	{
-		if (isset($this->associations[$name])) {
-			if (is_array($this->associations[$name])) {
-				$this->initializedData[$name] = new Schematic\Entries($this->data[$name], $this->associations[$name][0]);
-			}
-			else {
-				$this->initializedData[$name] = new $this->associations[$name]($this->data[$name]);
-			}
-		}
-		else {
-			$this->initializedData[$name] = $this->data[$name];
-		}
-
-		return $this->initializedData[$name];
-	}
-
-	/**
 	 * @param 'html'|'text' $emailType
 	 */
 	public function setEmailType($emailType)
 	{
-		$this->set('email_type', $emailType);
+		$this->email_type = $emailType;
 	}
 
 	public function setMergeFields(array $mergeFields)
 	{
-		$this->set('merge_fields', $mergeFields);
+		$this->merge_fields = $mergeFields;
 	}
 
-	protected function set($name, $value)
+	/**
+	 * @param string $email
+	 * @param string $listId
+	 * @param string $status
+	 *
+	 * @return static
+	 */
+	public static function create($email, $listId, $status = NULL)
 	{
-		$this->data[$name] = $value;
-		$this->initializedData[$name] = $value;
+		$data = [
+			'id'            => static::getSubscriberHash($email),
+			'email_address' => $email,
+			'list_id'       => $listId,
+		];
+
+		if (
+			!is_null($status)
+			&& in_array($status, [
+				static::STATUS_SUBSCRIBED,
+				static::STATUS_UNSUBSCRIBED,
+				static::STATUS_CLEANED,
+				static::STATUS_PENDING,
+				static::STATUS_TRANSACTIONAL,
+			])
+		) {
+			$data['status_if_new'] = $status;
+		}
+
+		return new static($data);
+	}
+
+	/**
+	 * @param string $email
+	 *
+	 * @return string
+	 */
+	private static function getSubscriberHash($email)
+	{
+		if ( !Nette\Utils\Validators::isEmail($email)) {
+			throw new Trejjam\MailChimp\Exception\CoruptedEmailException();
+		}
+
+		return md5(Nette\Utils\Strings::lower($email));
 	}
 }

@@ -84,10 +84,16 @@ class Lists
 		}
 	}
 
-	public function addMember(MailChimp\Entity\Lists\Member\MemberItemPut $memberItem)
+	public function addMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
 	{
 		try {
-			return $this->apiRequest->put($this->getMemberEndpointPath($memberItem->list_id, $memberItem->id), $memberItem->toArray(), MailChimp\Entity\Lists\Member\MemberItem::class);
+			return $this->apiRequest->put(
+				$this->getMemberEndpointPath(
+					$memberItem->list_id,
+					$memberItem->id
+				),
+				$memberItem->toArray(), MailChimp\Entity\Lists\Member\MemberItem::class
+			);
 		}
 		catch (GuzzleHttp\Exception\ClientException $clientException) {
 			throw new MailChimp\Exception\MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
