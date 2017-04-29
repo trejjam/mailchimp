@@ -118,6 +118,7 @@ class MemberItem extends Entity\AEntity
 	 * @param string $email
 	 *
 	 * @return string
+	 * @throws Trejjam\MailChimp\Exception\CoruptedEmailException
 	 */
 	public static function getSubscriberHash($email)
 	{

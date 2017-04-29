@@ -90,6 +90,7 @@ class Lists
 	 *
 	 * @return MailChimp\Entity\Lists\Member\MemberItem
 	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\MemberNotFoundException
 	 */
 	public function addMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
 	{
@@ -112,6 +113,7 @@ class Lists
 	 *
 	 * @return MailChimp\Entity\Lists\Member\MemberItem
 	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\MemberNotFoundException
 	 */
 	public function updateMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
 	{
@@ -134,6 +136,8 @@ class Lists
 	 *
 	 * @return array|bool
 	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\MemberNotFoundException
+	 * @throws MailChimp\Exception\RequestException
 	 */
 	public function removeMember(MailChimp\Entity\Lists\Member\MemberItem $memberItem)
 	{
@@ -176,6 +180,7 @@ class Lists
 	 *
 	 * @return Schematic\Entry|MailChimp\Entity\Lists\Segment\Segment
 	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\ListNotFoundException
 	 */
 	public function getSegment($listId, $segmentId)
 	{
@@ -193,6 +198,7 @@ class Lists
 	 *
 	 * @return Schematic\Entry|MailChimp\Entity\Lists\Member\MemberItem
 	 * @throws Nette\Utils\JsonException
+	 * @throws MailChimp\Exception\MemberNotFoundException
 	 */
 	public function addSegmentMember($segmentId, MailChimp\Entity\Lists\Member\MemberItem $memberItem)
 	{
