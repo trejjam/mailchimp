@@ -18,10 +18,15 @@ class DITest extends Tester\TestCase
 
 		$mailChimpExtension->setConfig(
 			[
-				'apiKey' => 'someApiKey123-us11',
-				'lists'  => [
+				'apiKey'   => 'someApiKey123-us11',
+				'lists'    => [
 					'newsletter' => 'foo123',
-					'user'       => 123,
+					'user'       => '123',
+				],
+				'segments' => [
+					'newsletter' => [
+						'segmentA' => 2,
+					],
 				],
 			]
 		);
@@ -36,7 +41,12 @@ class DITest extends Tester\TestCase
 				'apiKey'         => 'someApiKey123-us11',
 				'lists'          => [
 					'newsletter' => 'foo123',
-					'user'       => 123,
+					'user'       => '123',
+				],
+				'segments'       => [
+					'newsletter' => [
+						'segmentA' => 2,
+					],
 				],
 				'http'           => [
 					'client' => ['verify' => Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()],

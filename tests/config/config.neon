@@ -8,6 +8,6 @@ trejjam.mailchimp:
 	apiKey: %mailchimpApiKey%
 	lists:
 		newsletter: foo123
-		user: 123
+		user: '123'
 
 services:

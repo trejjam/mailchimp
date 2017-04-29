@@ -28,7 +28,8 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 		'findDataCenter' => TRUE,
 		'apiUrl'         => 'https://%s.api.mailchimp.com/%s/',
 		'apiKey'         => NULL,
-		'lists'          => [],  // list id from https://<dc>.api.mailchimp.com/playground/
+		'lists'          => [],  // self named ids from https://<dc>.api.mailchimp.com/playground/
+		'segments'       => [],
 		'http'           => [
 			'client' => [
 				'verify' => NULL, //NULL will be filled by Composer CA
@@ -42,6 +43,8 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 		'context'     => Trejjam\MailChimp\Context::class,
 		'group.root'  => Trejjam\MailChimp\Group\Root::class,
 		'group.lists' => Trejjam\MailChimp\Group\Lists::class,
+		'lists'       => Trejjam\MailChimp\Lists::class,
+		'segments'    => Trejjam\MailChimp\Segments::class,
 	];
 
 	protected $factoriesDefinition = [
@@ -67,9 +70,17 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 		Nette\Utils\Validators::assert($config['apiUrl'], 'string', 'apiUrl');
 		Nette\Utils\Validators::assert($config['apiKey'], 'string', 'apiKey');
 		Nette\Utils\Validators::assert($config['lists'], 'array', 'list');
+		Nette\Utils\Validators::assert($config['segments'], 'array', 'segments');
 
-		foreach ($config['lists'] as $k => $v) {
-			Nette\Utils\Validators::assert($v, 'string|integer', $k);
+		foreach ($config['lists'] as $listName => $listId) {
+			Nette\Utils\Validators::assert($listId, 'string', 'lists-' . $listName);
+		}
+		foreach ($config['segments'] as $listName => $segments) {
+			Nette\Utils\Validators::assertField($config['lists'], $listName);
+
+			foreach ($segments as $segmentId) {
+				Nette\Utils\Validators::assert($segmentId, 'string|integer', $listName);
+			}
 		}
 
 		if ($config['findDataCenter']) {
@@ -101,6 +112,17 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 				'httpClient' => $this->prefix('@http.client'),
 				'apiUrl'     => $config['apiUrl'],
 				'apiKey'     => $config['apiKey'],
+			]
+		);
+
+		$classes['lists']->setArguments(
+			[
+				'lists' => $config['lists'],
+			]
+		);
+		$classes['segments']->setArguments(
+			[
+				'segments' => $config['segments'],
 			]
 		);
 	}

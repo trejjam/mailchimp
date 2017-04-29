@@ -42,7 +42,6 @@ class RequestTest extends Tester\TestCase
 		Assert::type(MailChimp\Entity\Link::class, $firstLink);
 		Assert::same($firstLink->rel, 'self');
 		Assert::same($firstLink->method, 'GET');
-
 	}
 }
 

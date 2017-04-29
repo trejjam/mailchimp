@@ -161,7 +161,7 @@ class ListsTest extends Tester\TestCase
 			$_listEntity = $listsEntity->getLists()->current();
 
 			$memberItem1 = MailChimp\Entity\Lists\Member\MemberItem::create(
-				'jan+mailchimptest@trejbal.land',
+				'honza+mailchimptest@trejbal.land',
 				$_listEntity->id,
 				MailChimp\Entity\Lists\Member\MemberItem::STATUS_UNSUBSCRIBED
 			);
@@ -177,7 +177,7 @@ class ListsTest extends Tester\TestCase
 			Assert::same($memberItem1->merge_fields[MailChimp\Entity\Lists\Member\MemberItem::MERGE_FIELDS_LNAME], $memberItemAdd1->merge_fields[MailChimp\Entity\Lists\Member\MemberItem::MERGE_FIELDS_LNAME]);
 
 			$memberItem2 = MailChimp\Entity\Lists\Member\MemberItem::create(
-				'jan+mailchimptest2@trejbal.land',
+				'honza+mailchimptest8@trejbal.land',
 				$_listEntity->id,
 				MailChimp\Entity\Lists\Member\MemberItem::STATUS_SUBSCRIBED
 			);
@@ -266,7 +266,7 @@ class ListsTest extends Tester\TestCase
 				$listSegmentItem = $listSegmentItems->current();
 
 				$memberItem = MailChimp\Entity\Lists\Member\MemberItem::create(
-					'jan+mailchimptest5@trejbal.land',
+					'honza+mailchimptest5@trejbal.land',
 					$_listEntity->id,
 					MailChimp\Entity\Lists\Member\MemberItem::STATUS_SUBSCRIBED
 				);

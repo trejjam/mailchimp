@@ -2,7 +2,6 @@
 
 namespace Trejjam\MailChimp;
 
-use Nette;
 use Trejjam;
 
 class Context
