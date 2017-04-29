@@ -119,7 +119,7 @@ class MemberItem extends Entity\AEntity
 	 *
 	 * @return string
 	 */
-	private static function getSubscriberHash($email)
+	public static function getSubscriberHash($email)
 	{
 		if ( !Nette\Utils\Validators::isEmail($email)) {
 			throw new Trejjam\MailChimp\Exception\CoruptedEmailException();
