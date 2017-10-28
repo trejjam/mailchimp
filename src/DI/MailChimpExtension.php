@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Trejjam\MailChimp\DI;
 
@@ -47,7 +48,7 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 
 	public function __construct()
 	{
-		$this->default['http']['client']['verify'] = Composer\CaBundle\CaBundle::getSystemCaRootBundlePath();
+
 	}
 
 	/**
@@ -57,66 +58,64 @@ class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 	 *
 	 * @inheritdoc
 	 */
-	protected function createConfig()
+	public function loadConfiguration(bool $validateConfig = TRUE) : void
 	{
-		$config = parent::createConfig();
+		$this->default['http']['client']['verify'] = Composer\CaBundle\CaBundle::getSystemCaRootBundlePath();
 
-		Nette\Utils\Validators::assert($config['apiUrl'], 'string', 'apiUrl');
-		Nette\Utils\Validators::assert($config['apiKey'], 'string', 'apiKey');
-		Nette\Utils\Validators::assert($config['lists'], 'array', 'list');
-		Nette\Utils\Validators::assert($config['segments'], 'array', 'segments');
+		parent::loadConfiguration();
 
-		foreach ($config['lists'] as $listName => $listId) {
+		Nette\Utils\Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
+		Nette\Utils\Validators::assert($this->config['apiKey'], 'string', 'apiKey');
+		Nette\Utils\Validators::assert($this->config['lists'], 'array', 'list');
+		Nette\Utils\Validators::assert($this->config['segments'], 'array', 'segments');
+
+		foreach ($this->config['lists'] as $listName => $listId) {
 			Nette\Utils\Validators::assert($listId, 'string', 'lists-' . $listName);
 		}
-		foreach ($config['segments'] as $listName => $segments) {
-			Nette\Utils\Validators::assertField($config['lists'], $listName);
+		foreach ($this->config['segments'] as $listName => $segments) {
+			Nette\Utils\Validators::assertField($this->config['lists'], $listName);
 
 			foreach ($segments as $segmentId) {
 				Nette\Utils\Validators::assert($segmentId, 'string|integer', $listName);
 			}
 		}
 
-		if ($config['findDataCenter']) {
-			$accountDataCenter = Nette\Utils\Strings::match($config['apiKey'], '~-(us(?:\d+))$~');
-			$config['apiUrl'] = sprintf($config['apiUrl'], $accountDataCenter[1], Trejjam\MailChimp\Request::VERSION);
+		if ($this->config['findDataCenter']) {
+			$accountDataCenter = Nette\Utils\Strings::match($this->config['apiKey'], '~-(us(?:\d+))$~');
+			$this->config['apiUrl'] = sprintf($this->config['apiUrl'], $accountDataCenter[1], Trejjam\MailChimp\Request::VERSION);
 		}
 
-		Nette\Utils\Validators::assert($config['apiUrl'], 'string', 'apiUrl');
-
-		return $config;
+		Nette\Utils\Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
 	}
 
 	public function beforeCompile()
 	{
 		parent::beforeCompile();
 
-		$config = $this->createConfig();
+		$types = $this->getTypes();
 
-		$classes = $this->getClasses();
-
-		$classes['http.client']->setArguments(
+		$types['http.client']->setArguments(
 			[
-				'config' => $config['http']['client'],
+				'config' => $this->config['http']['client'],
 			]
 		)->setAutowired(FALSE);
 
-		$classes['request']->setArguments(
+		$types['request']->setArguments(
 			[
 				'httpClient' => $this->prefix('@http.client'),
-				'apiUrl'     => $config['apiUrl'],
-				'apiKey'     => $config['apiKey'],
+				'apiUrl'     => $this->config['apiUrl'],
+				'apiKey'     => $this->config['apiKey'],
 			]
 		);
 
-		$classes['lists']->setArguments(
+		$types['lists']->setArguments(
 			[
-				'lists' => $config['lists'],
+				'lists' => $this->config['lists'],
 			]
 		);
-		$classes['segments']->setArguments(
+		$types['segments']->setArguments(
 			[
-				'segments' => $config['segments'],
+				'segments' => $this->config['segments'],
 			]
 		);
 	}
