@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Entity;
 
-use Nette;
-use Trejjam;
 use Schematic;
 
 /**

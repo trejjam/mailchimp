@@ -8,6 +8,8 @@ use Nette\Utils\Random;
 use Tester\Assert;
 use Tester\TestCase;
 use Trejjam\MailChimp;
+use Trejjam\MailChimp\Exception\MemberNotFoundException;
+use Trejjam\MailChimp\Exception\ListNotFoundException;
 
 $container = require __DIR__ . '/../../bootstrap.php';
 
@@ -54,7 +56,7 @@ final class ListsTest extends TestCase
 
         Assert::throws(function () use ($groupLists) {
             $groupLists->get('not_exist_id');
-        }, MailChimp\Exception\ListNotFoundException::class);
+        }, ListNotFoundException::class);
 
         $listsEntity = $groupLists->getAll();
         if (count($listsEntity->getLists()) > 0) {
@@ -74,7 +76,7 @@ final class ListsTest extends TestCase
 
         Assert::throws(function () use ($groupLists) {
             $groupLists->getMembers('not_exist_id');
-        }, MailChimp\Exception\ListNotFoundException::class);
+        }, ListNotFoundException::class);
 
         $listsEntity = $groupLists->getAll();
         if (count($listsEntity->getLists()) > 0) {
@@ -132,11 +134,11 @@ final class ListsTest extends TestCase
 
             Assert::throws(function () use ($groupLists, $_listMemberItem) {
                 $groupLists->getMember($_listMemberItem->list_id, 'not_exist_id');
-            }, MailChimp\Exception\MemberNotFoundException::class);
+            }, MemberNotFoundException::class);
 
             Assert::throws(function () use ($groupLists, $_listMemberItem) {
                 $groupLists->getMember('not_exist_id', $_listMemberItem->id);
-            }, MailChimp\Exception\MemberNotFoundException::class);
+            }, MemberNotFoundException::class);
 
             $listMemberItem = $groupLists->getMember($_listMemberItem->list_id, $_listMemberItem->id);
 
@@ -203,16 +205,16 @@ final class ListsTest extends TestCase
         $groupLists->getMember($testList, $memberItem2->id);
         Assert::throws(function () use ($groupLists, $memberItem1) {
             $groupLists->getMember($memberItem1->list_id, $memberItem1->id);
-        }, MailChimp\Exception\MemberNotFoundException::class, "Member '{$memberItem1->id}' not found in list '{$memberItem1->list_id}' not found");
+        }, MemberNotFoundException::class, "Member '{$memberItem1->id}' not found in the list '{$memberItem1->list_id}'");
 
         $groupLists->removeMember($memberItemGet2);
         Assert::throws(function () use ($groupLists, $memberItem1) {
             $groupLists->getMember($memberItem1->list_id, $memberItem1->id);
-        }, MailChimp\Exception\MemberNotFoundException::class, "Member '{$memberItem1->id}' not found in list '{$memberItem1->list_id}' not found");
+        }, MemberNotFoundException::class, "Member '{$memberItem1->id}' not found in the list '{$memberItem1->list_id}'");
 
         Assert::throws(function () use ($groupLists, $memberItem2) {
             $groupLists->getMember($memberItem2->list_id, $memberItem2->id);
-        }, MailChimp\Exception\MemberNotFoundException::class, "Member '{$memberItem2->id}' not found in list '{$memberItem2->list_id}' not found");
+        }, MemberNotFoundException::class, "Member '{$memberItem2->id}' not found in the list '{$memberItem2->list_id}'");
     }
 
     public function testGetEntitySegments() : void
@@ -221,7 +223,7 @@ final class ListsTest extends TestCase
 
         Assert::throws(function () use ($groupLists) {
             $groupLists->getSegments('not_exist_id');
-        }, MailChimp\Exception\ListNotFoundException::class);
+        }, ListNotFoundException::class);
 
         $listsEntity = $groupLists->getAll();
         if (count($listsEntity->getLists()) > 0) {

@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Entity\Lists\Member;
 
-use Nette;
-use Trejjam;
+use Nette\Utils\Strings;
+use Nette\Utils\Validators;
 use Trejjam\MailChimp\Entity;
+use Trejjam\MailChimp\Exception\CoruptedEmailException;
 
 /**
  * @property-read string $id
@@ -104,14 +105,14 @@ final class MemberItem extends Entity\AEntity
     }
 
     /**
-     * @throws Trejjam\MailChimp\Exception\CoruptedEmailException
+     * @throws CoruptedEmailException
      */
     public static function getSubscriberHash(string $email) : string
     {
-        if (!Nette\Utils\Validators::isEmail($email)) {
-            throw new Trejjam\MailChimp\Exception\CoruptedEmailException;
+        if (!Validators::isEmail($email)) {
+            throw new CoruptedEmailException;
         }
 
-        return md5(Nette\Utils\Strings::lower($email));
+        return md5(Strings::lower($email));
     }
 }

@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Entity;
 
-use Nette;
 use Schematic;
-use Trejjam;
 
 /**
  * @property Contact $contact

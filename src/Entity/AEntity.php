@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Entity;
 
-use Trejjam;
+use Trejjam\MailChimp\Exception\ReadOnlyEntityException;
 
 abstract class AEntity
 {
@@ -52,7 +52,7 @@ abstract class AEntity
     public function __set(string $key, $value)
     {
         if (array_key_exists($key, $this->readOnly)) {
-            throw new Trejjam\MailChimp\Exception\ReadOnlyEntityException($key);
+            throw new ReadOnlyEntityException($key);
         }
 
         $this->data[$key] = $value;

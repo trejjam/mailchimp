@@ -5,7 +5,8 @@ namespace Trejjam\MailChimp\DI;
 
 use GuzzleHttp;
 use Composer\CaBundle\CaBundle;
-use Nette;
+use Nette\Utils\Strings;
+use Nette\Utils\Validators;
 use Trejjam;
 
 /**
@@ -60,28 +61,28 @@ final class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 
         parent::loadConfiguration();
 
-        Nette\Utils\Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
-        Nette\Utils\Validators::assert($this->config['apiKey'], 'string', 'apiKey');
-        Nette\Utils\Validators::assert($this->config['lists'], 'array', 'list');
-        Nette\Utils\Validators::assert($this->config['segments'], 'array', 'segments');
+        Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
+        Validators::assert($this->config['apiKey'], 'string', 'apiKey');
+        Validators::assert($this->config['lists'], 'array', 'list');
+        Validators::assert($this->config['segments'], 'array', 'segments');
 
         foreach ($this->config['lists'] as $listName => $listId) {
-            Nette\Utils\Validators::assert($listId, 'string', 'lists-' . $listName);
+            Validators::assert($listId, 'string', 'lists-' . $listName);
         }
         foreach ($this->config['segments'] as $listName => $segments) {
-            Nette\Utils\Validators::assertField($this->config['lists'], $listName);
+            Validators::assertField($this->config['lists'], $listName);
 
             foreach ($segments as $segmentId) {
-                Nette\Utils\Validators::assert($segmentId, 'string|integer', $listName);
+                Validators::assert($segmentId, 'string|integer', $listName);
             }
         }
 
         if ($this->config['findDataCenter']) {
-            $accountDataCenter = Nette\Utils\Strings::match($this->config['apiKey'], '~-(us(?:\d+))$~');
+            $accountDataCenter = Strings::match($this->config['apiKey'], '~-(us(?:\d+))$~');
             $this->config['apiUrl'] = sprintf($this->config['apiUrl'], $accountDataCenter[1], Trejjam\MailChimp\Request::VERSION);
         }
 
-        Nette\Utils\Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
+        Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
     }
 
     public function beforeCompile() : void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Trejjam\MailChimp\Entity\Lists\Segment;
 
 use Schematic;
-use Trejjam;
 use Trejjam\MailChimp\Entity;
 
 /**

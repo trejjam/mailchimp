@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Entity;
 
-use Nette;
 use Schematic;
-use Trejjam;
-use Trejjam\MailChimp\Entity;
 
 /**
  * @property-read string $account_id
@@ -19,13 +16,13 @@ use Trejjam\MailChimp\Entity;
  * @property-read string $total_subscribers
  * @property-read        $industry_stats
  */
-final  class Root extends Schematic\Entry
+final class Root extends Schematic\Entry
 {
-    use Entity\LinkTrait;
-    use Entity\ContactTrait;
+    use LinkTrait;
+    use ContactTrait;
 
     protected static $associations = [
-        '_links[]' => Entity\Link::class,
-        'contact'  => Entity\Contact::class,
+        '_links[]' => Link::class,
+        'contact'  => Contact::class,
     ];
 }
