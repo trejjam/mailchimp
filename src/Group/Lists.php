@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Group;
 
-use GuzzleHttp;
+use GuzzleHttp\Exception\ClientException;
 use Nette\Utils\JsonException;
 use Trejjam\MailChimp\Request;
 use Trejjam\MailChimp\Entity\Lists\Member\MemberItem;
@@ -49,7 +49,7 @@ final class Lists
     {
         try {
             return $this->apiRequest->get($this->getListEndpointPath($listId), ListItem::class);
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
     }
@@ -62,7 +62,7 @@ final class Lists
     {
         try {
             return $this->apiRequest->get($this->getMemberEndpointPath($listId), EntityMemberLists::class);
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
     }
@@ -75,7 +75,7 @@ final class Lists
     {
         try {
             return $this->apiRequest->get($this->getOneMemberEndpointPath($listId, $memberHash), MemberItem::class);
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberHash}' not found in the list '{$listId}'", $clientException);
         }
     }
@@ -94,7 +94,7 @@ final class Lists
                 ),
                 $memberItem->toArray(), MemberItem::class
             );
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
         }
     }
@@ -113,7 +113,7 @@ final class Lists
                 ),
                 $memberItem->getUpdated(), MemberItem::class
             );
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
         }
     }
@@ -127,7 +127,7 @@ final class Lists
     {
         try {
             return $this->apiRequest->delete($this->getOneMemberEndpointPath($memberItem->list_id, $memberItem->id));
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not found in the list '{$memberItem->list_id}'", $clientException);
         } catch (RequestException $requestException) {
             if ($requestException->getCode() === 204) {
@@ -147,7 +147,7 @@ final class Lists
     {
         try {
             return $this->apiRequest->get($this->getSegmentEndpointPath($listId), EntitySegmentLists::class);
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
     }
@@ -160,8 +160,27 @@ final class Lists
     {
         try {
             return $this->apiRequest->get($this->getOneSegmentEndpointPath($listId, $segmentId), Segment::class);
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             throw new ListNotFoundException("Segment '{$segmentId}' not found in the list '{$listId}'", $clientException);
+        }
+    }
+
+    /**
+     * @throws JsonException
+     * @throws ListNotFoundException
+     */
+    public function addSegment(string $listId, string $segmentName) : Segment
+    {
+        try {
+            return $this->apiRequest->post(
+                $this->getSegmentEndpointPath($listId),
+                [
+                    'name'           => $segmentName,
+                    'static_segment' => [],
+                ], Segment::class
+            );
+        } catch (ClientException $clientException) {
+            throw new ListNotFoundException("Segment '{$segmentName}' not created in the list '{$listId}'", $clientException);
         }
     }
 
@@ -179,7 +198,7 @@ final class Lists
                     'status'        => 'subscribed',
                 ], MemberItem::class
             );
-        } catch (GuzzleHttp\Exception\ClientException $clientException) {
+        } catch (ClientException $clientException) {
             \Tracy\Debugger::getLogger()->log($clientException);
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into segment '{$segmentId}'", $clientException);
         }

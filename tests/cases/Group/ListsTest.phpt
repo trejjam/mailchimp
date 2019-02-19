@@ -250,6 +250,31 @@ final class ListsTest extends TestCase
         }
     }
 
+    public function testAddSegment() : void
+    {
+        $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
+        $lists = $this->container->getByType(MailChimp\Lists::class);
+
+        $testList = $lists->getListByName(self::TEST_LIST);
+
+        $listSegments = $groupLists->getSegments($testList);
+        Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
+        Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()[0]);
+        Assert::same($testList, $listSegments->list_id);
+
+        $segmentName = 'Test segment - ' . Random::generate(10);
+
+        $segment = $groupLists->addSegment($testList, $segmentName);
+        Assert::type(MailChimp\Entity\Lists\Segment\Segment::class, $segment);
+        Assert::same($segmentName, $segment->name);
+
+        $segmentFetch = $groupLists->getSegment($testList, $segment->id);
+        Assert::type(MailChimp\Entity\Lists\Segment\Segment::class, $segmentFetch);
+        Assert::same($segmentName, $segmentFetch->name);
+        Assert::same($segment->type, $segmentFetch->type);
+        Assert::same($segment->created_at, $segmentFetch->created_at);
+    }
+
     public function testAddSegmentMember() : void
     {
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);

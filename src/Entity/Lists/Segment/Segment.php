@@ -13,7 +13,6 @@ use Trejjam\MailChimp\Entity;
  * @property-read string $type
  * @property-read string $created_at
  * @property-read string $updated_at
- * @property-read        $options
  * @property-read string $list_id
  */
 final class Segment extends Schematic\Entry
