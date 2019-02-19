@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Group;
 
@@ -150,7 +151,7 @@ final class Lists
     public function getSegment(string $listId, int $segmentId) : MailChimp\Entity\Lists\Segment\Segment
     {
         try {
-            return $this->apiRequest->get($this->getSegmentEndpointPath($listId, $segmentId), MailChimp\Entity\Lists\Segment\Segment::class);
+            return $this->apiRequest->get($this->getOneSegmentEndpointPath($listId, $segmentId), MailChimp\Entity\Lists\Segment\Segment::class);
         } catch (GuzzleHttp\Exception\ClientException $clientException) {
             throw new MailChimp\Exception\ListNotFoundException("Segment '{$segmentId}' not found in list '{$listId}' not found", $clientException);
         }
@@ -164,9 +165,11 @@ final class Lists
     {
         try {
             return $this->apiRequest->post(
-                $this->getSegmentEndpointPath($memberItem->list_id, $segmentId) . self::GROUP_MEMBER_PREFIX,
-                ['email_address' => $memberItem->email_address,
-                 'status'        => 'subscribed'], MailChimp\Entity\Lists\Member\MemberItem::class
+                $this->getOneSegmentEndpointPath($memberItem->list_id, $segmentId) . self::GROUP_MEMBER_PREFIX,
+                [
+                    'email_address' => $memberItem->email_address,
+                    'status'        => 'subscribed',
+                ], MailChimp\Entity\Lists\Member\MemberItem::class
             );
         } catch (GuzzleHttp\Exception\ClientException $clientException) {
             \Tracy\Debugger::getLogger()->log($clientException);
@@ -184,8 +187,13 @@ final class Lists
         return $this->getEndpointPath($listId) . self::GROUP_MEMBER_PREFIX . "/{$memberHash}";
     }
 
-    private function getSegmentEndpointPath(string $listId, string $segmentId) : string
+    private function getSegmentEndpointPath(string $listId) : string
     {
-        return $this->getEndpointPath($listId) . self::GROUP_SEGMENT_PREFIX . "/{$segmentId}";
+        return $this->getEndpointPath($listId) . self::GROUP_SEGMENT_PREFIX;
+    }
+
+    private function getOneSegmentEndpointPath(string $listId, int $segmentId) : string
+    {
+        return $this->getSegmentEndpointPath($listId) . "/{$segmentId}";
     }
 }
