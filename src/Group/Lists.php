@@ -5,6 +5,7 @@ namespace Trejjam\MailChimp\Group;
 
 use GuzzleHttp\Exception\ClientException;
 use Nette\Utils\JsonException;
+use Trejjam\MailChimp\PaginationOption;
 use Trejjam\MailChimp\Request;
 use Trejjam\MailChimp\Entity\Lists\Member\MemberItem;
 use Trejjam\MailChimp\Entity\Lists\ListItem;
@@ -15,6 +16,7 @@ use Trejjam\MailChimp\Entity\Lists\Segment\Lists as EntitySegmentLists;
 use Trejjam\MailChimp\Exception\ListNotFoundException;
 use Trejjam\MailChimp\Exception\MemberNotFoundException;
 use Trejjam\MailChimp\Exception\RequestException;
+use Trejjam\MailChimp\Exception\SegmenNameTooLongException;
 use Schematic;
 
 final class Lists
@@ -22,6 +24,7 @@ final class Lists
     private const GROUP_PREFIX = 'lists';
     private const GROUP_MEMBER_PREFIX = '/members';
     private const GROUP_SEGMENT_PREFIX = '/segments';
+    private const SEGMENT_NAME_MAX_LENGTH = 100;
 
     /**
      * @var Request
@@ -36,9 +39,34 @@ final class Lists
     /**
      * @throws JsonException
      */
-    public function getAll() : EntityLists
+    public function getAll(?PaginationOption $paginationOption = null) : EntityLists
     {
-        return $this->apiRequest->get($this->getEndpointPath(), EntityLists::class);
+        return $this->apiRequest->get($this->getEndpointPath(), EntityLists::class, $paginationOption);
+    }
+
+    public function getAllIterator(string $listId) : \Generator
+    {
+        $paginationOption = new PaginationOption;
+
+        $segments = $this->getAll($paginationOption);
+        $totalSegmentsCount = $segments->total_items;
+        $yelded = 0;
+
+        while (true) {
+            foreach ($segments->getSegments() as $segment) {
+                $yelded++;
+                yield $segment;
+            }
+
+            if ($yelded < $totalSegmentsCount) {
+                $paginationOption = $paginationOption->nextPage();
+                $segments = $this->getAll($paginationOption);
+                $totalSegmentsCount = $segments->total_items;
+            }
+            else {
+                break;
+            }
+        }
     }
 
     /**
@@ -58,12 +86,37 @@ final class Lists
      * @throws JsonException
      * @throws ListNotFoundException
      */
-    public function getMembers(string $listId) : EntityMemberLists
+    public function getMembers(string $listId, ?PaginationOption $paginationOption = null) : EntityMemberLists
     {
         try {
-            return $this->apiRequest->get($this->getMemberEndpointPath($listId), EntityMemberLists::class);
+            return $this->apiRequest->get($this->getMemberEndpointPath($listId), EntityMemberLists::class, $paginationOption);
         } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
+        }
+    }
+
+    public function getMembersIterator(string $listId) : \Generator
+    {
+        $paginationOption = new PaginationOption;
+
+        $segments = $this->getMembers($listId, $paginationOption);
+        $totalSegmentsCount = $segments->total_items;
+        $yelded = 0;
+
+        while (true) {
+            foreach ($segments->getSegments() as $segment) {
+                $yelded++;
+                yield $segment;
+            }
+
+            if ($yelded < $totalSegmentsCount) {
+                $paginationOption = $paginationOption->nextPage();
+                $segments = $this->getMembers($listId, $paginationOption);
+                $totalSegmentsCount = $segments->total_items;
+            }
+            else {
+                break;
+            }
         }
     }
 
@@ -143,12 +196,37 @@ final class Lists
      * @throws JsonException
      * @throws ListNotFoundException
      */
-    public function getSegments(string $listId) : EntitySegmentLists
+    public function getSegments(string $listId, ?PaginationOption $paginationOption = null) : EntitySegmentLists
     {
         try {
-            return $this->apiRequest->get($this->getSegmentEndpointPath($listId), EntitySegmentLists::class);
+            return $this->apiRequest->get($this->getSegmentEndpointPath($listId), EntitySegmentLists::class, $paginationOption);
         } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
+        }
+    }
+
+    public function getSegmentsIterator(string $listId) : \Generator
+    {
+        $paginationOption = new PaginationOption;
+
+        $segments = $this->getSegments($listId, $paginationOption);
+        $totalSegmentsCount = $segments->total_items;
+        $yelded = 0;
+
+        while (true) {
+            foreach ($segments->getSegments() as $segment) {
+                $yelded++;
+                yield $segment;
+            }
+
+            if ($yelded < $totalSegmentsCount) {
+                $paginationOption = $paginationOption->nextPage();
+                $segments = $this->getSegments($listId, $paginationOption);
+                $totalSegmentsCount = $segments->total_items;
+            }
+            else {
+                break;
+            }
         }
     }
 
@@ -171,6 +249,10 @@ final class Lists
      */
     public function addSegment(string $listId, string $segmentName) : Segment
     {
+        if (strlen($segmentName) > self::SEGMENT_NAME_MAX_LENGTH) {
+            throw new SegmenNameTooLongException($segmentName);
+        }
+
         try {
             return $this->apiRequest->post(
                 $this->getSegmentEndpointPath($listId),

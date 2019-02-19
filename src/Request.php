@@ -42,13 +42,22 @@ final class Request
      * @return array|Entry|mixed
      * @throws JsonException
      */
-    protected function makeRequest(string $method, string $endpointPath, ?string $endpointClass = null, array $requestOptions = [])
-    {
+    protected function makeRequest(
+        string $method,
+        string $endpointPath,
+        ?string $endpointClass = null,
+        array $requestOptions = [],
+        ?PaginationOption $paginationOption = null
+    ) {
         $mergedRequestOptions = array_merge_recursive(
             [
                 RequestOptions::AUTH => [self::API_USER, $this->apiKey],
             ], $requestOptions
         );
+
+        if ($paginationOption !== null) {
+            $endpointPath .= "?offset={$paginationOption->getOffset()}&count={$paginationOption->getCount()}";
+        }
 
         $response = $this->httpClient->request(
             $method, $this->apiUrl . $endpointPath, $mergedRequestOptions
@@ -74,9 +83,9 @@ final class Request
      * @return array|Entry|mixed
      * @throws JsonException
      */
-    public function get(string $endpointPath, ?string $endpointClass = null)
+    public function get(string $endpointPath, ?string $endpointClass = null, ?PaginationOption $paginationOption = null)
     {
-        return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass);
+        return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass, [], $paginationOption);
     }
 
     /**
