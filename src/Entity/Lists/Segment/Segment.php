@@ -16,7 +16,7 @@ use Trejjam\MailChimp\Entity;
  * @property-read        $options
  * @property-read string $list_id
  */
-class Segment extends Schematic\Entry
+final class Segment extends Schematic\Entry
 {
 	use Entity\LinkTrait;
 

@@ -11,20 +11,20 @@ use Trejjam\MailChimp\Entity;
  * @property-read string    $list_id
  * @property-read int       $total_items
  */
-class Lists extends Schematic\Entry
+final class Lists extends Schematic\Entry
 {
-	use Entity\LinkTrait;
+    use Entity\LinkTrait;
 
-	protected static $associations = [
-		'_links[]'   => Entity\Link::class,
-		'segments[]' => Segment::class,
-	];
+    protected static $associations = [
+        '_links[]'   => Entity\Link::class,
+        'segments[]' => Segment::class,
+    ];
 
-	/**
-	 * @return Segment[]|Schematic\Entries
-	 */
-	public function getSegments()
-	{
-		return $this->segments;
-	}
+    /**
+     * @return Segment[]|Schematic\Entries
+     */
+    public function getSegments() : Schematic\Entries
+    {
+        return $this->segments;
+    }
 }

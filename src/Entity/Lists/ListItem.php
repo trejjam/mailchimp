@@ -8,10 +8,6 @@ use Trejjam;
 use Trejjam\MailChimp\Entity;
 
 /**
- * Class Lists
- *
- * @package Trejjam\MailChimp\Entity\Lists
- *
  * @property-read string $id
  * @property-read string $name
  * @property-read string $permission_reminder
@@ -29,7 +25,7 @@ use Trejjam\MailChimp\Entity;
  * @property-read        $modules
  * @property-read        $stats
  */
-class ListItem extends Schematic\Entry
+final class ListItem extends Schematic\Entry
 {
 	use Entity\LinkTrait;
 	use Entity\ContactTrait;

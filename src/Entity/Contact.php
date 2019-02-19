@@ -7,10 +7,6 @@ use Trejjam;
 use Schematic;
 
 /**
- * Class Link
- *
- * @package Trejjam\MailChimp\Entity
- *
  * @property-read string $company
  * @property-read string $addr1
  * @property-read string $addr2
@@ -19,7 +15,7 @@ use Schematic;
  * @property-read string $zip
  * @property-read string $country
  */
-class Contact extends Schematic\Entry
+final class Contact extends Schematic\Entry
 {
 
 }

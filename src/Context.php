@@ -4,38 +4,32 @@ namespace Trejjam\MailChimp;
 
 use Trejjam;
 
-class Context
+final class Context
 {
-	/**
-	 * @var Group\Root
-	 */
-	private $root;
-	/**
-	 * @var Group\Lists
-	 */
-	private $lists;
+    /**
+     * @var Group\Root
+     */
+    private $root;
+    /**
+     * @var Group\Lists
+     */
+    private $lists;
 
-	public function __construct(
-		Trejjam\MailChimp\Group\Root $root,
-		Trejjam\MailChimp\Group\Lists $lists
-	) {
-		$this->root = $root;
-		$this->lists = $lists;
-	}
+    public function __construct(
+        Trejjam\MailChimp\Group\Root $root,
+        Trejjam\MailChimp\Group\Lists $lists
+    ) {
+        $this->root = $root;
+        $this->lists = $lists;
+    }
 
-	/**
-	 * @return Group\Root
-	 */
-	public function getRootGroup()
-	{
-		return $this->root;
-	}
+    public function getRootGroup() : Group\Root
+    {
+        return $this->root;
+    }
 
-	/**
-	 * @return Group\Lists
-	 */
-	public function getListsGroup()
-	{
-		return $this->lists;
-	}
+    public function getListsGroup() : Group\Lists
+    {
+        return $this->lists;
+    }
 }

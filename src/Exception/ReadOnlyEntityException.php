@@ -6,7 +6,7 @@ use Nette;
 use App;
 use Trejjam;
 
-class ReadOnlyEntityException extends \InvalidArgumentException
+final class ReadOnlyEntityException extends \InvalidArgumentException
 {
 
 }

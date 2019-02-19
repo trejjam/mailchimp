@@ -2,7 +2,7 @@
 
 namespace Trejjam\MailChimp\Exception;
 
-class MemberNotFoundException extends NotFoundException
+final class MemberNotFoundException extends NotFoundException
 {
 
 }

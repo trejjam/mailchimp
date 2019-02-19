@@ -1,5 +1,29 @@
 #/bin/bash
 
+set -e
+
 TARGET_TEST="${1}"
 
-vendor/bin/tester -c tests/php.ini "tests/${TARGET_TEST}" --coverage tests/temp/coverage.html --coverage-src ./src/
+#run from project root
+cat	\
+	/usr/local/etc/php/conf.d/php.ini \
+	tests/php-unix.ini > tests/php-unix.generated.ini
+
+export PHP_IDE_CONFIG="serverName=mail-chimp-api"
+
+mkdir -p tests/temp
+mkdir -p tests/log
+
+declare -a TESTER_ARGS;
+
+if [[ -n ${DEVELOPMENT} && ${DEVELOPMENT} == 'true' && "${RUN_ALL}" != 'true' ]]; then
+	TESTER_ARGS+=('--stop-on-fail')
+fi
+
+if [[ -n $( ls /usr/local/lib/php/extensions/no-debug-non-zts-*/xdebug.so 2> /dev/null || echo "" ) ]]; then
+	TESTER_ARGS+=(--coverage tests/log/coverage.html --coverage-src App)
+
+	cat /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini >> tests/php-unix.generated.ini
+fi
+
+vendor/bin/tester -c tests/php-unix.generated.ini "tests/${TARGET_TEST}" --coverage tests/temp/coverage.html --coverage-src ./src/

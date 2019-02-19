@@ -2,20 +2,20 @@
 
 namespace Trejjam\MailChimp;
 
-class Segments
+final class Segments
 {
-	/**
-	 * @var string[]
-	 */
-	private $segments;
+    /**
+     * @var string[]
+     */
+    private $segments;
 
-	public function __construct(array $segments)
-	{
-		$this->segments = $segments;
-	}
+    public function __construct(array $segments)
+    {
+        $this->segments = $segments;
+    }
 
-	public function getSegmentInList($listName, $segmentName)
-	{
-		return $this->segments[$listName][$segmentName];
-	}
+    public function getSegmentInList(string $listName, string $segmentName) : string
+    {
+        return $this->segments[$listName][$segmentName];
+    }
 }

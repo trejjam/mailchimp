@@ -6,97 +6,100 @@ use Trejjam;
 
 abstract class AEntity
 {
-	/**
-	 * @var boolean[]
-	 */
-	protected $readOnly = [];
+    /**
+     * @var bool[]
+     */
+    protected $readOnly = [];
 
-	protected $associations = [];
+    protected $associations = [];
 
-	protected $initData = [];
+    protected $initData = [];
 
-	protected $data = [];
+    /**
+     * @var AEntity[]|Entries[]|string[]|int[]
+     */
+    protected $data = [];
 
-	public function __construct(array $data)
-	{
-		foreach ($this->associations as $key => $class) {
-			if ( !array_key_exists($key, $data)) {
-				continue;
-			}
+    public function __construct(array $data)
+    {
+        foreach ($this->associations as $key => $class) {
+            if (!array_key_exists($key, $data)) {
+                continue;
+            }
 
-			if (is_array($class)) {
-				$class = $class[0];
+            if (is_array($class)) {
+                $class = $class[0];
 
-				$data[$key] = new Entries($data[$key], $class);
-			}
-			else {
-				$data[$key] = new $class($data[$key]);
-			}
-		}
+                $data[$key] = new Entries($data[$key], $class);
+            }
+            else {
+                $data[$key] = new $class($data[$key]);
+            }
+        }
 
-		$this->initData = $data;
-		$this->data = $data;
+        $this->initData = $data;
+        $this->data = $data;
 
-		$this->init();
-	}
+        $this->init();
+    }
 
-	public function init()
-	{
+    public function init() : void
+    {
 
-	}
+    }
 
-	public function __set($key, $value)
-	{
-		if (array_key_exists($key, $this->readOnly)) {
-			throw new Trejjam\MailChimp\Exception\ReadOnlyEntityException($key);
-		}
+    public function __set(string $key, $value)
+    {
+        if (array_key_exists($key, $this->readOnly)) {
+            throw new Trejjam\MailChimp\Exception\ReadOnlyEntityException($key);
+        }
 
-		$this->data[$key] = $value;
-	}
+        $this->data[$key] = $value;
+    }
 
-	public function __get($key)
-	{
-		if ( !array_key_exists($key, $this->data)) {
-			return NULL;
-		}
+    public function __get(string $key)
+    {
+        if (!array_key_exists($key, $this->data)) {
+            return null;
+        }
 
-		return $this->data[$key];
-	}
+        return $this->data[$key];
+    }
 
-	public function toArray()
-	{
-		$out = $this->data;
+    public function toArray() : array
+    {
+        $out = $this->data;
 
-		foreach ($out as $key => $entityData) {
-			if ($entityData instanceof AEntity) {
-				$out[$key] = $entityData->toArray();
-			}
-			else if ($entityData instanceof Entries) {
-				$out[$key] = $entityData->toArray();
-			}
-		}
+        foreach ($out as $key => $entityData) {
+            if ($entityData instanceof AEntity) {
+                $out[$key] = $entityData->toArray();
+            }
+            else if ($entityData instanceof Entries) {
+                $out[$key] = $entityData->toArray();
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
-	public function getUpdated()
-	{
-		$out = [];
+    public function getUpdated() : array
+    {
+        $out = [];
 
-		foreach ($this->data as $key => $entityData) {
-			if (
-				//or handle nested?
-				$entityData instanceof AEntity
-				|| $entityData instanceof Entries
-			) {
-				continue;
-			}
+        foreach ($this->data as $key => $entityData) {
+            if (
+                //or handle nested?
+                $entityData instanceof AEntity
+                || $entityData instanceof Entries
+            ) {
+                continue;
+            }
 
-			if ($entityData !== $this->initData[$key]) {
-				$out[$key] = $entityData;
-			}
-		}
+            if ($entityData !== $this->initData[$key]) {
+                $out[$key] = $entityData;
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 }

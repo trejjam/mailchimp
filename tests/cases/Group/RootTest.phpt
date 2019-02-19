@@ -7,9 +7,9 @@ use Tester;
 use Tester\Assert;
 use Trejjam\MailChimp;
 
-$container = require __DIR__ . '/../bootstrap.php';
+$container = require __DIR__ . '/../../bootstrap.php';
 
-class RootTest extends Tester\TestCase
+final class RootTest extends Tester\TestCase
 {
 	private $container;
 
@@ -18,7 +18,7 @@ class RootTest extends Tester\TestCase
 		$this->container = $container;
 	}
 
-	public function testGetAll()
+	public function testGetAll():void
 	{
 		/** @var MailChimp\Group\Root $groupRoot */
 		$groupRoot = $this->container->getByType(MailChimp\Group\Root::class);

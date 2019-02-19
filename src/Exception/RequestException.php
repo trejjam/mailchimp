@@ -4,7 +4,7 @@ namespace Trejjam\MailChimp\Exception;
 
 use Psr;
 
-class RequestException extends \LogicException
+final class RequestException extends \LogicException
 {
 	/**
 	 * @var Psr\Http\Message\ResponseInterface

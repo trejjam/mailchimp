@@ -13,6 +13,7 @@
 	],
 	"require": {
 		"php": ">=7.1",
+
 		"nette/di": "~2.4",
 		"trejjam/base-extension": "~0.7",
 		"guzzlehttp/guzzle": "^6.2",
@@ -20,14 +21,19 @@
 		"tharos/schematic": "^1.2"
 	},
 	"require-dev": {
-		"nette/tester": "@dev",
-		"nette/robot-loader": "~2.4",
-		"nette/bootstrap": "~2.4",
-		"tracy/tracy": "~2.4"
+		"nette/tester": "^2.1",
+		"nette/robot-loader": "^3.1",
+		"nette/bootstrap": "^2.4",
+		"tracy/tracy": "^2.4"
 	},
 	"autoload": {
 		"psr-4": {
 			"Trejjam\\MailChimp\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Trejjam\\MailChimp\\Tests\\": "tests/src/"
 		}
 	},
 	"extra": {

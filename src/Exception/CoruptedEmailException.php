@@ -2,7 +2,7 @@
 
 namespace Trejjam\MailChimp\Exception;
 
-class CoruptedEmailException extends \LogicException
+final class CoruptedEmailException extends \LogicException
 {
 
 }

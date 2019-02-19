@@ -2,7 +2,7 @@
 
 namespace Trejjam\MailChimp\Exception;
 
-class ListNotFoundException extends NotFoundException
+final class ListNotFoundException extends NotFoundException
 {
 
 }

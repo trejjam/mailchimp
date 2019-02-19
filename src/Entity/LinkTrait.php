@@ -7,19 +7,15 @@ use Schematic;
 use Trejjam;
 
 /**
- * Class LinksTrait
- *
- * @package Trejjam\MailChimp\Entity
- *
  * @property Link[] $_links
  */
 trait LinkTrait
 {
-	/**
-	 * @return Link[]|Schematic\Entries
-	 */
-	public function getLinks()
-	{
-		return $this->_links;
-	}
+    /**
+     * @return Link[]|Schematic\Entries
+     */
+    public function getLinks() : Schematic\Entries
+    {
+        return $this->_links;
+    }
 }

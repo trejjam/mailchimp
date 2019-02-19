@@ -4,7 +4,7 @@ namespace Trejjam\MailChimp\Exception;
 
 use Exception;
 
-class NotFoundException extends \LogicException
+abstract class NotFoundException extends \LogicException
 {
 	public function __construct($message = "", $code = 0, Exception $previous = NULL)
 	{

@@ -1,0 +1,8 @@
+composer.lock
+vendor
+
+tests/php-unix.generated.ini
+tests/log
+tests/temp
+tests/config/config.local.neon
+tests/**/output
