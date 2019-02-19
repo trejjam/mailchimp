@@ -21,10 +21,10 @@ final class Lists extends Schematic\Entry
     ];
 
     /**
-     * @return Segment[]|Schematic\Entries
+     * @return Segment[]
      */
-    public function getSegments() : Schematic\Entries
+    public function getSegments() : array
     {
-        return $this->segments;
+        return $this->segments->toArray();
     }
 }

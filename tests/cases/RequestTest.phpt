@@ -20,12 +20,10 @@ final class RequestTest extends Tester\TestCase
 
     public function testConfig() : void
     {
-        /** @var MailChimp\Request $api */
         $api = $this->container->getByType(MailChimp\Request::class);
 
         Assert::type(MailChimp\Request::class, $api);
 
-        /** @var \Trejjam\MailChimp\Entity\Root $rootResponse */
         $rootResponseArray = $api->get('/');
         $rootResponseObject = new MailChimp\Entity\Root($rootResponseArray);
 
@@ -36,8 +34,7 @@ final class RequestTest extends Tester\TestCase
         Assert::same($rootResponseObject->account_id, $rootResponse->account_id);
         Assert::notSame('', $rootResponse->last_login);
 
-        /** @var MailChimp\Entity\Link $firstLink */
-        $firstLink = $rootResponse->getLinks()->current();
+        $firstLink = $rootResponse->getLinks()[0];
 
         Assert::type(MailChimp\Entity\Link::class, $firstLink);
         Assert::same($firstLink->rel, 'self');

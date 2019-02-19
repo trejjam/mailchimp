@@ -12,10 +12,10 @@ use Trejjam;
 trait LinkTrait
 {
     /**
-     * @return Link[]|Schematic\Entries
+     * @return Link[]
      */
-    public function getLinks() : Schematic\Entries
+    public function getLinks() : array
     {
-        return $this->_links;
+        return $this->_links->toArray();
     }
 }

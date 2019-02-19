@@ -4,15 +4,19 @@ namespace Trejjam\MailChimp\Tests\Group;
 
 use Nette\DI\Container;
 use Nette\Utils\Random;
-use Tester\TestCase;
 use Tester\Assert;
+use Tester\TestCase;
 use Trejjam\MailChimp;
 
 $container = require __DIR__ . '/../../bootstrap.php';
 
 final class ListsTest extends TestCase
 {
-    const TEST_LIST = 'testList';
+    private const TEST_LIST = 'testList';
+
+    /**
+     * @var Container
+     */
     private $container;
 
     function __construct(Container $container)
@@ -22,7 +26,6 @@ final class ListsTest extends TestCase
 
     public function testGetAll() : void
     {
-        /** @var MailChimp\Group\Lists $groupLists */
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
 
         Assert::type(MailChimp\Group\Lists::class, $groupLists);
@@ -32,20 +35,18 @@ final class ListsTest extends TestCase
 
         $listItems = $listsEntity->getLists();
 
-        if ($listItems->count() > 0) {
-            /** @var MailChimp\Entity\Lists\ListItem $listItem */
-            $listItem = $listItems->current();
+        if (count($listItems) > 0) {
+            $listItem = $listItems[0];
 
             Assert::type(MailChimp\Entity\Lists\ListItem::class, $listItem);
             Assert::notSame(null, $listItem->id);
             Assert::type(MailChimp\Entity\Contact::class, $listItem->getContact());
-            Assert::type(MailChimp\Entity\Link::class, $listItem->getLinks()->current());
+            Assert::type(MailChimp\Entity\Link::class, $listItem->getLinks()[0]);
         }
     }
 
     public function testGetEntity() : void
     {
-        /** @var MailChimp\Group\Lists $groupLists */
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
 
         Assert::type(MailChimp\Group\Lists::class, $groupLists);
@@ -55,20 +56,19 @@ final class ListsTest extends TestCase
         }, MailChimp\Exception\ListNotFoundException::class);
 
         $listsEntity = $groupLists->getAll();
-        if ($listsEntity->getLists()->count() > 0) {
-            $_listEntity = $listsEntity->getLists()->current();
+        if (count($listsEntity->getLists()) > 0) {
+            $_listEntity = $listsEntity->getLists()[0];
 
             $listEntity = $groupLists->get($_listEntity->id);
             Assert::type(MailChimp\Entity\Lists\ListItem::class, $listEntity);
             Assert::notSame(null, $listEntity->id);
             Assert::type(MailChimp\Entity\Contact::class, $listEntity->getContact());
-            Assert::type(MailChimp\Entity\Link::class, $listEntity->getLinks()->current());
+            Assert::type(MailChimp\Entity\Link::class, $listEntity->getLinks()[0]);
         }
     }
 
     public function testGetEntityMembers() : void
     {
-        /** @var MailChimp\Group\Lists $groupLists */
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
 
         Assert::throws(function () use ($groupLists) {
@@ -76,21 +76,20 @@ final class ListsTest extends TestCase
         }, MailChimp\Exception\ListNotFoundException::class);
 
         $listsEntity = $groupLists->getAll();
-        if ($listsEntity->getLists()->count() > 0) {
-            $_listEntity = $listsEntity->getLists()->current();
+        if (count($listsEntity->getLists()) > 0) {
+            $_listEntity = $listsEntity->getLists()[0];
 
             $listMembers = $groupLists->getMembers($_listEntity->id);
             Assert::type(MailChimp\Entity\Lists\Member\Lists::class, $listMembers);
-            Assert::type(MailChimp\Entity\Link::class, $listMembers->getLinks()->current());
+            Assert::type(MailChimp\Entity\Link::class, $listMembers->getLinks()[0]);
             Assert::same($_listEntity->id, $listMembers->list_id);
 
             $listMemberItems = $listMembers->getMembers();
 
-            if ($listMemberItems->count() > 0) {
-                /** @var MailChimp\Entity\Lists\Member\MemberItem $listMemberItem */
-                $listMemberItem = $listMemberItems->current();
+            if (count($listMemberItems) > 0) {
+                $listMemberItem = $listMemberItems[0];
                 Assert::type(MailChimp\Entity\Lists\Member\MemberItem::class, $listMemberItem);
-                Assert::type(MailChimp\Entity\Link::class, $listMemberItem->getLinks()->current());
+                Assert::type(MailChimp\Entity\Link::class, $listMemberItem->getLinks()[0]);
                 Assert::same($_listEntity->id, $listMemberItem->list_id);
 
                 $memberItem = MailChimp\Entity\Lists\Member\MemberItem::create($listMemberItem->email_address, $listMemberItem->list_id);
@@ -106,9 +105,7 @@ final class ListsTest extends TestCase
 
     public function testGetEntityMember() : void
     {
-        /** @var MailChimp\Group\Lists $groupLists */
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
-        /** @var MailChimp\Lists $lists */
         $lists = $this->container->getByType(MailChimp\Lists::class);
 
         $testList = $lists->getListByName(self::TEST_LIST);
@@ -129,9 +126,8 @@ final class ListsTest extends TestCase
         $listMembers = $groupLists->getMembers($testList);
         $listMemberItems = $listMembers->getMembers();
 
-        if ($listMemberItems->count() > 0) {
-            /** @var MailChimp\Entity\Lists\Member\MemberItem $_listMemberItem */
-            $_listMemberItem = $listMemberItems->current();
+        if (count($listMemberItems) > 0) {
+            $_listMemberItem = $listMemberItems[0];
 
             Assert::throws(function () use ($groupLists, $_listMemberItem) {
                 $groupLists->getMember($_listMemberItem->list_id, 'not_exist_id');
@@ -141,11 +137,10 @@ final class ListsTest extends TestCase
                 $groupLists->getMember('not_exist_id', $_listMemberItem->id);
             }, MailChimp\Exception\MemberNotFoundException::class);
 
-            /** @var MailChimp\Entity\Lists\Member\MemberItem $listMemberItem */
             $listMemberItem = $groupLists->getMember($_listMemberItem->list_id, $_listMemberItem->id);
 
             Assert::type(MailChimp\Entity\Lists\Member\MemberItem::class, $listMemberItem);
-            Assert::type(MailChimp\Entity\Link::class, $listMemberItem->getLinks()->current());
+            Assert::type(MailChimp\Entity\Link::class, $listMemberItem->getLinks()[0]);
         }
 
         $groupLists->removeMember($memberItem3);
@@ -153,9 +148,7 @@ final class ListsTest extends TestCase
 
     public function testAddUpdateDeleteEntityMember() : void
     {
-        /** @var MailChimp\Group\Lists $groupLists */
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
-        /** @var MailChimp\Lists $lists */
         $lists = $this->container->getByType(MailChimp\Lists::class);
 
         $testList = $lists->getListByName(self::TEST_LIST);
@@ -223,7 +216,6 @@ final class ListsTest extends TestCase
 
     public function testGetEntitySegments() : void
     {
-        /** @var MailChimp\Group\Lists $groupLists */
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
 
         Assert::throws(function () use ($groupLists) {
@@ -231,23 +223,21 @@ final class ListsTest extends TestCase
         }, MailChimp\Exception\ListNotFoundException::class);
 
         $listsEntity = $groupLists->getAll();
-        if ($listsEntity->getLists()->count() > 0) {
-            /** @var MailChimp\Entity\Lists\ListItem $_listEntity */
-            $_listEntity = $listsEntity->getLists()->current();
+        if (count($listsEntity->getLists()) > 0) {
+            $_listEntity = $listsEntity->getLists()[0];
 
             $listSegments = $groupLists->getSegments($_listEntity->id);
             Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
-            Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()->current());
+            Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()[0]);
             Assert::same($_listEntity->id, $listSegments->list_id);
 
             $listSegmentItems = $listSegments->getSegments();
 
-            if ($listSegmentItems->count() > 0) {
-                /** @var MailChimp\Entity\Lists\Segment\Segment $listSegmentItem */
-                $listSegmentItem = $listSegmentItems->current();
+            if (count($listSegmentItems) > 0) {
+                $listSegmentItem = $listSegmentItems[0];
 
                 Assert::type(MailChimp\Entity\Lists\Segment\Segment::class, $listSegmentItem);
-                Assert::type(MailChimp\Entity\Link::class, $listSegmentItem->getLinks()->current());
+                Assert::type(MailChimp\Entity\Link::class, $listSegmentItem->getLinks()[0]);
                 Assert::same($_listEntity->id, $listSegmentItem->list_id);
 
                 $segment = $groupLists->getSegment($_listEntity->id, $listSegmentItem->id);
@@ -259,23 +249,20 @@ final class ListsTest extends TestCase
 
     public function testAddSegmentMember() : void
     {
-        /** @var MailChimp\Group\Lists $groupLists */
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
-        /** @var MailChimp\Lists $lists */
         $lists = $this->container->getByType(MailChimp\Lists::class);
 
         $testList = $lists->getListByName(self::TEST_LIST);
 
         $listSegments = $groupLists->getSegments($testList);
         Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
-        Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()->current());
+        Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()[0]);
         Assert::same($testList, $listSegments->list_id);
 
         $listSegmentItems = $listSegments->getSegments();
 
-        if ($listSegmentItems->count() > 0) {
-            /** @var MailChimp\Entity\Lists\Segment\Segment $listSegmentItem */
-            $listSegmentItem = $listSegmentItems->current();
+        if (count($listSegmentItems) > 0) {
+            $listSegmentItem = $listSegmentItems[0];
 
             $memberItem = MailChimp\Entity\Lists\Member\MemberItem::create(
                 $this->getUniqueDummyMail(5),
@@ -302,7 +289,7 @@ final class ListsTest extends TestCase
     {
         $randomHash = Random::generate();
 
-        return "honza+mailchimptest-{$randomHash}-{$purposeId}@trejbal.land";
+        return "honza-mailchimptest-{$randomHash}-{$purposeId}@trejbal.land";
     }
 }
 

@@ -20,7 +20,6 @@ final class ContextTest extends Tester\TestCase
 
     public function testConfig() : void
     {
-        /** @var MailChimp\Context $mailchimpContext */
         $mailchimpContext = $this->container->getByType(MailChimp\Context::class);
 
         Assert::type(MailChimp\Context::class, $mailchimpContext);
@@ -30,7 +29,6 @@ final class ContextTest extends Tester\TestCase
 
         Assert::type(MailChimp\Entity\Root::class, $rootResponse);
 
-        /** @var MailChimp\Entity\Lists\Lists $listsResponse */
         $listsResponse = $mailchimpContext->getListsGroup()->getAll();
 
         Assert::type(MailChimp\Entity\Lists\Lists::class, $listsResponse);

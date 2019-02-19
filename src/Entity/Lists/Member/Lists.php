@@ -21,10 +21,10 @@ final class Lists extends Schematic\Entry
     ];
 
     /**
-     * @return MemberItem[]|Schematic\Entries
+     * @return MemberItem[]
      */
-    public function getMembers() : Schematic\Entries
+    public function getMembers() : array
     {
-        return $this->members;
+        return $this->members->toArray();
     }
 }

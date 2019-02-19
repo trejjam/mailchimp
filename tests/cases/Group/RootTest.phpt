@@ -20,7 +20,6 @@ final class RootTest extends Tester\TestCase
 
 	public function testGetAll():void
 	{
-		/** @var MailChimp\Group\Root $groupRoot */
 		$groupRoot = $this->container->getByType(MailChimp\Group\Root::class);
 
 		Assert::type(MailChimp\Group\Root::class, $groupRoot);
