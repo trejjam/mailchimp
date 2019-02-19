@@ -249,7 +249,8 @@ final class Lists
      */
     public function addSegment(string $listId, string $segmentName) : Segment
     {
-        if (strlen($segmentName) > self::SEGMENT_NAME_MAX_LENGTH) {
+        // Strings::length is not usable
+        if (strlen($segmentName) >= self::SEGMENT_NAME_MAX_LENGTH) {
             throw new SegmenNameTooLongException($segmentName);
         }
 
