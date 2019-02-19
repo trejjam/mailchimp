@@ -7,13 +7,13 @@ use Exception;
 
 abstract class NotFoundException extends \LogicException
 {
-	public function __construct($message = "", $code = 0, Exception $previous = NULL)
-	{
-		if ($code instanceof Exception && is_null($previous)) {
-			$previous = $code;
-			$code = 0;
-		}
+    public function __construct($message = "", $code = 0, Exception $previous = null)
+    {
+        if ($code instanceof Exception && $previous === null) {
+            $previous = $code;
+            $code = 0;
+        }
 
-		parent::__construct($message, $code, $previous);
-	}
+        parent::__construct($message, $code, $previous);
+    }
 }

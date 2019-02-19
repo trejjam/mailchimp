@@ -89,7 +89,7 @@ final class MemberItem extends Entity\AEntity
         ];
 
         if (
-            !is_null($status)
+            $status !== null
             && in_array($status, [
                 static::STATUS_SUBSCRIBED,
                 static::STATUS_UNSUBSCRIBED,
