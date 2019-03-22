@@ -58,7 +58,7 @@ trejjam.mailchimp:
 
 Example user subscribe component
 
-`OrderPresenter.php`:
+`MessageFactory.php`:
 ```php
 /**
  * @method onNewsletterSubscribe(Trejjam\MailChimp\Entity\Lists\Member\MemberItem $memberItem)
