@@ -21,7 +21,7 @@
 		"tharos/schematic": "^1.2"
 	},
 	"require-dev": {
-		"nette/tester": "^2.1",
+		"nette/tester": "^2.2",
 		"nette/robot-loader": "^3.1",
 		"nette/bootstrap": "^2.4",
 		"tracy/tracy": "^2.4"

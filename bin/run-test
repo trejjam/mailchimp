@@ -26,4 +26,4 @@ if [[ -n $( ls /usr/local/lib/php/extensions/no-debug-non-zts-*/xdebug.so 2> /de
 	cat /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini >> tests/php-unix.generated.ini
 fi
 
-vendor/bin/tester -c tests/php-unix.generated.ini "tests/${TARGET_TEST}" --coverage tests/temp/coverage.html --coverage-src ./src/
+vendor/bin/tester -c tests/php-unix.generated.ini "tests/cases/${TARGET_TEST}" --coverage tests/temp/coverage.html --coverage-src ./src/

@@ -5,6 +5,7 @@ namespace Trejjam\MailChimp\DI;
 
 use GuzzleHttp;
 use Composer\CaBundle\CaBundle;
+use Nette\DI\Compiler;
 use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 use Trejjam;
@@ -23,6 +24,7 @@ final class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
         'lists'          => [],  // self named ids from https://<dc>.api.mailchimp.com/playground/
         'segments'       => [],
         'http'           => [
+            'clientFactory' => null,
             'client' => [
                 'verify' => null, //NULL will be filled by Composer CA
             ],
@@ -31,10 +33,13 @@ final class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 
     protected $classesDefinition = [
         'http.client' => GuzzleHttp\Client::class,
+
         'request'     => Trejjam\MailChimp\Request::class,
+
         'context'     => Trejjam\MailChimp\Context::class,
         'group.root'  => Trejjam\MailChimp\Group\Root::class,
         'group.lists' => Trejjam\MailChimp\Group\Lists::class,
+
         'lists'       => Trejjam\MailChimp\Lists::class,
         'segments'    => Trejjam\MailChimp\Segments::class,
     ];
@@ -45,7 +50,7 @@ final class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
 
     public function __construct()
     {
-
+        $this->default['http']['client']['verify'] = CaBundle::getSystemCaRootBundlePath();
     }
 
     /**
@@ -57,14 +62,13 @@ final class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
      */
     public function loadConfiguration(bool $validateConfig = true) : void
     {
-        $this->default['http']['client']['verify'] = CaBundle::getSystemCaRootBundlePath();
-
         parent::loadConfiguration();
 
         Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
         Validators::assert($this->config['apiKey'], 'string', 'apiKey');
         Validators::assert($this->config['lists'], 'array', 'list');
         Validators::assert($this->config['segments'], 'array', 'segments');
+        Validators::assert($this->config['http']['clientFactory'], 'null|string|array|Nette\DI\Statement', 'http.client');
 
         foreach ($this->config['lists'] as $listName => $listId) {
             Validators::assert($listId, 'string', 'lists-' . $listName);
@@ -90,6 +94,15 @@ final class MailChimpExtension extends Trejjam\BaseExtension\DI\BaseExtension
         parent::beforeCompile();
 
         $types = $this->getTypes();
+
+        if ($this->config['http']['clientFactory']!==null) {
+            if (is_string($this->config['http']['clientFactory']) && Strings::startsWith($this->config['http']['clientFactory'], '@')) {
+                $types['http.client']->setFactory($this->config['http']['clientFactory']);
+            }
+            else {
+                Compiler::loadDefinition($types['http.client'], $this->config['http']['clientFactory']);
+            }
+        }
 
         $types['http.client']->setArguments(
             [
