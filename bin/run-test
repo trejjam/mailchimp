@@ -7,7 +7,7 @@ TARGET_TEST="${1}"
 #run from project root
 cat	\
 	/usr/local/etc/php/conf.d/php.ini \
-	tests/php-unix.ini > tests/php-unix.generated.ini
+	tests/config/php-unix.ini > tests/php-unix.generated.ini
 
 export PHP_IDE_CONFIG="serverName=mail-chimp-api"
 

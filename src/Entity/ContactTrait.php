@@ -10,9 +10,6 @@ use Schematic;
  */
 trait ContactTrait
 {
-    /**
-     * @return Contact|Schematic\Entry
-     */
     public function getContact() : Contact
     {
         return $this->contact;

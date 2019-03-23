@@ -16,7 +16,7 @@ use Trejjam\MailChimp\Entity\Lists\Segment\Lists as EntitySegmentLists;
 use Trejjam\MailChimp\Exception\ListNotFoundException;
 use Trejjam\MailChimp\Exception\MemberNotFoundException;
 use Trejjam\MailChimp\Exception\RequestException;
-use Trejjam\MailChimp\Exception\SegmenNameTooLongException;
+use Trejjam\MailChimp\Exception\SegmentNameTooLongException;
 use Schematic;
 
 final class Lists
@@ -48,20 +48,20 @@ final class Lists
     {
         $paginationOption = new PaginationOption;
 
-        $segments = $this->getAll($paginationOption);
-        $totalSegmentsCount = $segments->total_items;
+        $lists = $this->getAll($paginationOption);
+        $totalListsCount = $lists->total_items;
         $yelded = 0;
 
         while (true) {
-            foreach ($segments->getSegments() as $segment) {
+            foreach ($lists->getLists() as $list) {
                 $yelded++;
-                yield $segment;
+                yield $list;
             }
 
-            if ($yelded < $totalSegmentsCount) {
+            if ($yelded < $totalListsCount) {
                 $paginationOption = $paginationOption->nextPage();
-                $segments = $this->getAll($paginationOption);
-                $totalSegmentsCount = $segments->total_items;
+                $lists = $this->getAll($paginationOption);
+                $totalListsCount = $lists->total_items;
             }
             else {
                 break;
@@ -100,19 +100,19 @@ final class Lists
         $paginationOption = new PaginationOption;
 
         $segments = $this->getMembers($listId, $paginationOption);
-        $totalSegmentsCount = $segments->total_items;
+        $totalMemberCount = $segments->total_items;
         $yelded = 0;
 
         while (true) {
-            foreach ($segments->getSegments() as $segment) {
+            foreach ($segments->getMembers() as $member) {
                 $yelded++;
-                yield $segment;
+                yield $member;
             }
 
-            if ($yelded < $totalSegmentsCount) {
+            if ($yelded < $totalMemberCount) {
                 $paginationOption = $paginationOption->nextPage();
                 $segments = $this->getMembers($listId, $paginationOption);
-                $totalSegmentsCount = $segments->total_items;
+                $totalMemberCount = $segments->total_items;
             }
             else {
                 break;
@@ -251,7 +251,7 @@ final class Lists
     {
         // Strings::length is not usable
         if (strlen($segmentName) >= self::SEGMENT_NAME_MAX_LENGTH) {
-            throw new SegmenNameTooLongException($segmentName);
+            throw new SegmentNameTooLongException($segmentName);
         }
 
         try {

@@ -11,7 +11,7 @@ use Trejjam\MailChimp\Entity;
  * @property-read string $name
  * @property-read string $permission_reminder
  * @property-read bool   $use_archive_bar
- * @property-read        $campaign_defaults
+ * @property-read mixed  $campaign_defaults
  * @property-read string $notify_on_subscribe
  * @property-read string $notify_on_unsubscribe
  * @property-read string $date_created
@@ -21,8 +21,8 @@ use Trejjam\MailChimp\Entity;
  * @property-read string $subscribe_url_long
  * @property-read string $beamer_address
  * @property-read string $visibility
- * @property-read        $modules
- * @property-read        $stats
+ * @property-read mixed  $modules
+ * @property-read mixed  $stats
  */
 final class ListItem extends Schematic\Entry
 {

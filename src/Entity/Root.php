@@ -14,7 +14,7 @@ use Schematic;
  * @property-read string $pro_enabled
  * @property-read string $last_login
  * @property-read string $total_subscribers
- * @property-read        $industry_stats
+ * @property-read mixed $industry_stats
  */
 final class Root extends Schematic\Entry
 {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp\Exception;
 
-final class SegmenNameTooLongException extends \InvalidArgumentException
+final class SegmentNameTooLongException extends \InvalidArgumentException
 {
     /**
      * @var string
@@ -12,6 +12,8 @@ final class SegmenNameTooLongException extends \InvalidArgumentException
 
     public function __construct(string $segmentName)
     {
+    	parent::__construct();
+
         $this->segmentName = $segmentName;
     }
 }

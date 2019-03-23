@@ -88,7 +88,7 @@ Example user subscribe component
  * @method onNewsletterSubscribe(Trejjam\MailChimp\Entity\Lists\Member\MemberItem $memberItem)
  * @method onNewsletterSubscribeError(Trejjam\MailChimp\Entity\Lists\Member\MemberItem $memberItem)
  */
-final class MessageFactory extends UI\Component
+final class MessageFactory extends Nette\Application\UI\Component
 {
 	/**
 	 * @var Trejjam\MailChimp\Lists

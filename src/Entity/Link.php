@@ -6,10 +6,10 @@ namespace Trejjam\MailChimp\Entity;
 use Schematic;
 
 /**
- * @property-read $rel
- * @property-read $href
- * @property-read $method
- * @property-read $targetSchema
+ * @property-read mixed $rel
+ * @property-read mixed $href
+ * @property-read mixed $method
+ * @property-read mixed $targetSchema
  */
 final class Link extends Schematic\Entry
 {

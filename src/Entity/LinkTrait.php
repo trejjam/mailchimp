@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Trejjam\MailChimp\Entity;
 
 /**
- * @property Link[] $_links
+ * @property Link[]&Entries $_links
  */
 trait LinkTrait
 {

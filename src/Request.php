@@ -72,7 +72,7 @@ final class Request
 
         $returnArray = Json::decode($response->getBody()->getContents(), Json::FORCE_ARRAY);
 
-        if (empty($endpointClass)) {
+		if ($endpointClass === null || $endpointClass === '') {
             return $returnArray;
         }
 
