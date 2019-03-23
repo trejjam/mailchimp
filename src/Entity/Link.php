@@ -13,5 +13,4 @@ use Schematic;
  */
 final class Link extends Schematic\Entry
 {
-
 }

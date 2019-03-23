@@ -5,19 +5,18 @@ namespace Trejjam\MailChimp\Group;
 
 use GuzzleHttp\Exception\ClientException;
 use Nette\Utils\JsonException;
-use Trejjam\MailChimp\PaginationOption;
-use Trejjam\MailChimp\Request;
-use Trejjam\MailChimp\Entity\Lists\Member\MemberItem;
 use Trejjam\MailChimp\Entity\Lists\ListItem;
 use Trejjam\MailChimp\Entity\Lists\Lists as EntityLists;
 use Trejjam\MailChimp\Entity\Lists\Member\Lists as EntityMemberLists;
-use Trejjam\MailChimp\Entity\Lists\Segment\Segment;
+use Trejjam\MailChimp\Entity\Lists\Member\MemberItem;
 use Trejjam\MailChimp\Entity\Lists\Segment\Lists as EntitySegmentLists;
+use Trejjam\MailChimp\Entity\Lists\Segment\Segment;
 use Trejjam\MailChimp\Exception\ListNotFoundException;
 use Trejjam\MailChimp\Exception\MemberNotFoundException;
 use Trejjam\MailChimp\Exception\RequestException;
 use Trejjam\MailChimp\Exception\SegmentNameTooLongException;
-use Schematic;
+use Trejjam\MailChimp\PaginationOption;
+use Trejjam\MailChimp\Request;
 
 final class Lists
 {
@@ -31,7 +30,7 @@ final class Lists
      */
     private $apiRequest;
 
-    function __construct(Request $apiRequest)
+    public function __construct(Request $apiRequest)
     {
         $this->apiRequest = $apiRequest;
     }
@@ -46,7 +45,7 @@ final class Lists
 
     public function getAllIterator(string $listId) : \Generator
     {
-        $paginationOption = new PaginationOption;
+        $paginationOption = new PaginationOption();
 
         $lists = $this->getAll($paginationOption);
         $totalListsCount = $lists->total_items;
@@ -97,7 +96,7 @@ final class Lists
 
     public function getMembersIterator(string $listId) : \Generator
     {
-        $paginationOption = new PaginationOption;
+        $paginationOption = new PaginationOption();
 
         $segments = $this->getMembers($listId, $paginationOption);
         $totalMemberCount = $segments->total_items;
@@ -145,7 +144,8 @@ final class Lists
                     $memberItem->list_id,
                     $memberItem->id
                 ),
-                $memberItem->toArray(), MemberItem::class
+                $memberItem->toArray(),
+                MemberItem::class
             );
         } catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
@@ -164,7 +164,8 @@ final class Lists
                     $memberItem->list_id,
                     $memberItem->id
                 ),
-                $memberItem->getUpdated(), MemberItem::class
+                $memberItem->getUpdated(),
+                MemberItem::class
             );
         } catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
@@ -186,9 +187,8 @@ final class Lists
             if ($requestException->getCode() === 204) {
                 return null;
             }
-            else {
+             
                 throw $requestException;
-            }
         }
     }
 
@@ -207,7 +207,7 @@ final class Lists
 
     public function getSegmentsIterator(string $listId) : \Generator
     {
-        $paginationOption = new PaginationOption;
+        $paginationOption = new PaginationOption();
 
         $segments = $this->getSegments($listId, $paginationOption);
         $totalSegmentsCount = $segments->total_items;
@@ -260,7 +260,8 @@ final class Lists
                 [
                     'name'           => $segmentName,
                     'static_segment' => [],
-                ], Segment::class
+                ],
+                Segment::class
             );
         } catch (ClientException $clientException) {
             throw new ListNotFoundException("Segment '{$segmentName}' not created in the list '{$listId}'", $clientException);
@@ -279,7 +280,8 @@ final class Lists
                 [
                     'email_address' => $memberItem->email_address,
                     'status'        => 'subscribed',
-                ], MemberItem::class
+                ],
+                MemberItem::class
             );
         } catch (ClientException $clientException) {
             \Tracy\Debugger::getLogger()->log($clientException);

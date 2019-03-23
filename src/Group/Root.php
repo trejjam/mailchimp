@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Trejjam\MailChimp\Group;
 
 use Nette\Utils\JsonException;
-use Trejjam\MailChimp\Request;
 use Trejjam\MailChimp\Entity\Root as EntityRoot;
+use Trejjam\MailChimp\Request;
 
 final class Root
 {
@@ -14,7 +14,7 @@ final class Root
      */
     private $apiRequest;
 
-    function __construct(Request $apiRequest)
+    public function __construct(Request $apiRequest)
     {
         $this->apiRequest = $apiRequest;
     }

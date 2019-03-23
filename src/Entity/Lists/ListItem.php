@@ -26,11 +26,11 @@ use Trejjam\MailChimp\Entity;
  */
 final class ListItem extends Schematic\Entry
 {
-	use Entity\LinkTrait;
-	use Entity\ContactTrait;
+    use Entity\LinkTrait;
+    use Entity\ContactTrait;
 
-	protected static $associations = [
-		'_links[]' => Entity\Link::class,
-		'contact'  => Entity\Contact::class,
-	];
+    protected static $associations = [
+        '_links[]' => Entity\Link::class,
+        'contact'  => Entity\Contact::class,
+    ];
 }

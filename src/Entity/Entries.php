@@ -7,23 +7,23 @@ use Schematic;
 
 final class Entries extends Schematic\Entries
 {
-	/**
-	 * @return Schematic\Entry[]
-	 */
-	public function toArray() : array
-	{
-		$out = parent::toArray();
+    /**
+     * @return Schematic\Entry[]
+     */
+    public function toArray() : array
+    {
+        $out = parent::toArray();
 
-		/** @var AEntity|Entries|Schematic\Entry $entity */
+        /** @var AEntity|Entries|Schematic\Entry $entity */
         foreach ($out as $key => $entity) {
             if ($entity instanceof AEntity) {
                 $out[$key] = $entity->toArray();
             }
-            else if ($entity instanceof Entries) {
+            elseif ($entity instanceof self) {
                 $out[$key] = $entity->toArray();
             }
         }
 
-		return $out;
-	}
+        return $out;
+    }
 }

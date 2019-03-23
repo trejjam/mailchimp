@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Trejjam\MailChimp;
 
-use Trejjam\MailChimp\Group\Root;
 use Trejjam\MailChimp\Group\Lists;
+use Trejjam\MailChimp\Group\Root;
 
 final class Context
 {

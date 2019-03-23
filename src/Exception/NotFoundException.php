@@ -7,7 +7,7 @@ use Exception;
 
 abstract class NotFoundException extends \LogicException
 {
-    public function __construct($message = "", $code = 0, Exception $previous = null)
+    public function __construct($message = '', $code = 0, ?\Throwable $previous = null)
     {
         if ($code instanceof Exception && $previous === null) {
             $previous = $code;

@@ -16,5 +16,4 @@ use Schematic;
  */
 final class Contact extends Schematic\Entry
 {
-
 }

@@ -14,12 +14,12 @@ use Trejjam\MailChimp\Entity;
  */
 final class Lists extends Schematic\Entry
 {
-	use Entity\LinkTrait;
+    use Entity\LinkTrait;
 
-	protected static $associations = [
-		'_links[]'   => Entity\Link::class,
-		'segments[]' => Segment::class,
-	];
+    protected static $associations = [
+        '_links[]'   => Entity\Link::class,
+        'segments[]' => Segment::class,
+    ];
 
     /**
      * @return Segment[]

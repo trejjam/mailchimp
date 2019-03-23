@@ -12,8 +12,13 @@ final class SegmentNameTooLongException extends \InvalidArgumentException
 
     public function __construct(string $segmentName)
     {
-    	parent::__construct();
+        parent::__construct();
 
         $this->segmentName = $segmentName;
+    }
+
+    public function getSegmentName() : string
+    {
+        return $this->segmentName;
     }
 }

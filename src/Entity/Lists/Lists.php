@@ -13,18 +13,18 @@ use Trejjam\MailChimp\Entity;
  */
 final class Lists extends Schematic\Entry
 {
-	use Entity\LinkTrait;
+    use Entity\LinkTrait;
 
-	protected static $associations = [
-		'_links[]' => Entity\Link::class,
-		'lists[]'  => ListItem::class,
-	];
+    protected static $associations = [
+        '_links[]' => Entity\Link::class,
+        'lists[]'  => ListItem::class,
+    ];
 
-	/**
-	 * @return ListItem[]
-	 */
-	public function getLists() : array
-	{
-		return $this->lists->toArray();
-	}
+    /**
+     * @return ListItem[]
+     */
+    public function getLists() : array
+    {
+        return $this->lists->toArray();
+    }
 }

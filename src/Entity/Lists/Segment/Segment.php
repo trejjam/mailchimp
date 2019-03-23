@@ -17,9 +17,9 @@ use Trejjam\MailChimp\Entity;
  */
 final class Segment extends Schematic\Entry
 {
-	use Entity\LinkTrait;
+    use Entity\LinkTrait;
 
-	protected static $associations = [
-		'_links[]' => Entity\Link::class,
-	];
+    protected static $associations = [
+        '_links[]' => Entity\Link::class,
+    ];
 }

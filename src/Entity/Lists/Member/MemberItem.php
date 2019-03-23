@@ -30,90 +30,89 @@ use Trejjam\MailChimp\Exception\CoruptedEmailException;
  */
 final class MemberItem extends Entity\AEntity
 {
-	use Entity\LinkTrait;
+    use Entity\LinkTrait;
 
-	const STATUS_SUBSCRIBED    = 'subscribed';
-	const STATUS_UNSUBSCRIBED  = 'unsubscribed';
-	const STATUS_CLEANED       = 'cleaned';
-	const STATUS_PENDING       = 'pending';
-	const STATUS_TRANSACTIONAL = 'transactional';
+    public const STATUS_SUBSCRIBED    = 'subscribed';
+    public const STATUS_UNSUBSCRIBED  = 'unsubscribed';
+    public const STATUS_CLEANED       = 'cleaned';
+    public const STATUS_PENDING       = 'pending';
+    public const STATUS_TRANSACTIONAL = 'transactional';
 
-	const MERGE_FIELDS_FNAME = 'FNAME';
-	const MERGE_FIELDS_LNAME = 'LNAME';
+    public const MERGE_FIELDS_FNAME = 'FNAME';
+    public const MERGE_FIELDS_LNAME = 'LNAME';
 
-	protected $readOnly = [
-		'unique_email_id'  => true,
-		'stats'            => true,
-		'ip_signup'        => true,
-		'timestamp_signup' => true,
-		'ip_opt'           => true,
-		'timestamp_opt'    => true,
-		'member_rating'    => true,
-		'last_changed'     => true,
-		'email_client'     => true,
-		'last_note'        => true,
-		'list_id'          => true,
-		'_links'           => true,
-	];
+    protected $readOnly = [
+        'unique_email_id'  => true,
+        'stats'            => true,
+        'ip_signup'        => true,
+        'timestamp_signup' => true,
+        'ip_opt'           => true,
+        'timestamp_opt'    => true,
+        'member_rating'    => true,
+        'last_changed'     => true,
+        'email_client'     => true,
+        'last_note'        => true,
+        'list_id'          => true,
+        '_links'           => true,
+    ];
 
-	protected $associations = [
-		'_links' => [Entity\Link::class],
-	];
+    protected $associations = [
+        '_links' => [Entity\Link::class],
+    ];
 
-	public function setEmailAddress(string $emailAddress) : self
-	{
-		$this->email_address = $emailAddress;
+    public function setEmailAddress(string $emailAddress) : self
+    {
+        $this->email_address = $emailAddress;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setEmailType(string $emailType) : void
-	{
-		if ( !in_array($emailType, ['html' | 'text'], true)) {
-			throw new \InvalidArgumentException;
-		}
+    public function setEmailType(string $emailType) : void
+    {
+        if (!in_array($emailType, ['html' | 'text'], true)) {
+            throw new \InvalidArgumentException();
+        }
 
-		$this->email_type = $emailType;
-	}
+        $this->email_type = $emailType;
+    }
 
-	public function setMergeFields(array $mergeFields) : void
-	{
-		$this->merge_fields = $mergeFields;
-	}
+    public function setMergeFields(array $mergeFields) : void
+    {
+        $this->merge_fields = $mergeFields;
+    }
 
-	public static function create(string $email, string $listId, ?string $status = null) : self
-	{
-		$data = [
-			'id'            => static::getSubscriberHash($email),
-			'email_address' => $email,
-			'list_id'       => $listId,
-		];
+    public static function create(string $email, string $listId, ?string $status = null) : self
+    {
+        $data = [
+            'id'            => static::getSubscriberHash($email),
+            'email_address' => $email,
+            'list_id'       => $listId,
+        ];
 
-		if (
-			$status !== null
-			&& in_array($status, [
-				static::STATUS_SUBSCRIBED,
-				static::STATUS_UNSUBSCRIBED,
-				static::STATUS_CLEANED,
-				static::STATUS_PENDING,
-				static::STATUS_TRANSACTIONAL,
-			], true)
-		) {
-			$data['status_if_new'] = $status;
-		}
+        if ($status !== null
+            && in_array($status, [
+                static::STATUS_SUBSCRIBED,
+                static::STATUS_UNSUBSCRIBED,
+                static::STATUS_CLEANED,
+                static::STATUS_PENDING,
+                static::STATUS_TRANSACTIONAL,
+            ], true)
+        ) {
+            $data['status_if_new'] = $status;
+        }
 
-		return new static($data);
-	}
+        return new static($data);
+    }
 
-	/**
-	 * @throws CoruptedEmailException
-	 */
-	public static function getSubscriberHash(string $email) : string
-	{
-		if ( !Validators::isEmail($email)) {
-			throw new CoruptedEmailException;
-		}
+    /**
+     * @throws CoruptedEmailException
+     */
+    public static function getSubscriberHash(string $email) : string
+    {
+        if (!Validators::isEmail($email)) {
+            throw new CoruptedEmailException();
+        }
 
-		return md5(Strings::lower($email));
-	}
+        return md5(Strings::lower($email));
+    }
 }
