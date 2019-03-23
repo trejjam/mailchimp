@@ -27,6 +27,10 @@ trejjam.mailchimp:
   segments:
     newsletter: 
       bar: 123
+  http:
+    clientFactory: null
+    client:
+      verify: Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()
 ```
 
 Minimal production configuration:
@@ -37,6 +41,26 @@ extensions:
 
 trejjam.mailchimp:
   apiKey: 'someApiKey123-us11'
+```
+
+## Configuration extra
+
+This extensions is compatible with [contributte/guzzlette](https://github.com/contributte/guzzlette).
+
+Minimal interoperability configuration:
+
+```yaml
+extensions:
+    trejjam.mailchimp: Trejjam\MailChimp\DI\MailChimpExtension
+    contributte.guzzle: Contributte\Guzzlette\DI\GuzzleExtension
+
+trejjam.mailchimp:
+  apiKey: 'someApiKey123-us11'
+  http:
+    clientFactory: @contributte.guzzle.clientFactory::createClient()
+
+contributte.guzzle:
+  debug: %debugMode%
 ```
 
 ## Services available in DI container
