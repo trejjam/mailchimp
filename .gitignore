@@ -1,6 +1,8 @@
 composer.lock
 vendor
 
+coverage.xml
+
 tests/php-unix.generated.ini
 tests/log
 tests/temp
