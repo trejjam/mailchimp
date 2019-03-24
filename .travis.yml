@@ -13,6 +13,7 @@ install:
   - travis_retry composer install --no-progress --prefer-dist
 
 script:
+  - "echo -n -e \"parameters:\n\tmailchimpApiKey: ${MAILCHIMP_API_KEY}\n\tmailchimpTestList: ${MAILCHIMP_TEST_LIST}\" > 'tests/config/config.local.neon'"
   # Tests
   - vendor/bin/tester -s -p php --colors 1 ./tests/cases
 
