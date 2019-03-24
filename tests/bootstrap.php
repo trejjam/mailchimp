@@ -34,10 +34,12 @@ $configurator->createRobotLoader()
 $configurator->addConfig(__DIR__ . '/config/config.neon');
 
 if (array_key_exists('MAILCHIMP_API_KEY', $_ENV) && array_key_exists('MAILCHIMP_TEST_LIST', $_ENV)) {
-    $configurator->addParameters(
+    $configurator->addConfig(
         [
-            'mailchimpApiKey'   => $_ENV['MAILCHIMP_API_KEY'],
-            'mailchimpTestList' => $_ENV['MAILCHIMP_TEST_LIST'],
+            'parameters' => [
+                'mailchimpApiKey'   => $_ENV['MAILCHIMP_API_KEY'],
+                'mailchimpTestList' => $_ENV['MAILCHIMP_TEST_LIST'],
+            ],
         ]
     );
 }
