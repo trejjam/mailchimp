@@ -47,7 +47,7 @@ jobs:
       script:
         - echo $MAILCHIMP_VARIABLE
         - echo $MAILCHIMP_SECRET_VARIABLE
-		- echo -n -e "parameters:\n\tmailchimpApiKey: ${MAILCHIMP_API_KEY}\n\tmailchimpTestList: ${MAILCHIMP_TEST_LIST}" > "tests/config/config.local.neon"
+        - "echo -n -e 'parameters:\n\tmailchimpApiKey: ${MAILCHIMP_API_KEY}\n\tmailchimpTestList: ${MAILCHIMP_TEST_LIST}' > 'tests/config/config.local.neon'"
         - vendor/bin/tester -s -p php --colors 1 -C -d extension=xdebug.so --coverage ./coverage.xml --coverage-src ./src ./tests/cases
       after_script:
         - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
