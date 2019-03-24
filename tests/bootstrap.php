@@ -11,15 +11,20 @@ if (!class_exists('Tester\Assert')) {
 Tester\Environment::setup();
 
 $tempDir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'temp', Nette\Utils\Random::generate()]);
+$logDir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'log']);
 
 if (!file_exists($tempDir)) {
     mkdir($tempDir, 0777, true);
 }
 
+if (!file_exists($logDir)) {
+    mkdir($logDir, 0777, true);
+}
+
 $configurator = new Nette\Configurator;
 $configurator->setDebugMode(true);
-Tracy\Debugger::$logDirectory = __DIR__ . '/log';
-//$configurator->enableDebugger(__DIR__ . '/../log');
+Tracy\Debugger::$logDirectory = $logDir;
+//$configurator->enableDebugger($logDir);
 $configurator->setTempDirectory($tempDir);
 
 $configurator->createRobotLoader()
