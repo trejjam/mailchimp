@@ -14,16 +14,16 @@
 	"require": {
 		"php": ">=7.1",
 
-		"nette/di": "~2.4",
-		"trejjam/base-extension": "^0.8",
-		"guzzlehttp/guzzle": "^6.2",
 		"composer/ca-bundle": "^1.1",
+		"nette/di": "^2.4.10 || ^3.0",
+		"guzzlehttp/guzzle": "^6.3",
+		"trejjam/base-extension": "^0.8",
 		"tharos/schematic": "^1.2"
 	},
 	"require-dev": {
 		"nette/robot-loader": "^3.1",
-		"nette/bootstrap": "^2.4",
-		"tracy/tracy": "^2.4",
+		"nette/bootstrap": "^2.4 || ^3.0",
+		"tracy/tracy": "^2.4 || ^3.0",
 
 		"nette/tester": "^2.2",
 
@@ -31,7 +31,6 @@
 		"phpstan/phpstan-deprecation-rules": "^0.11",
 		"phpstan/phpstan-strict-rules": "^0.11",
 		"thecodingmachine/phpstan-safe-rule": "^0.1",
-		"roave/no-floaters": "dev-master",
 
 		"symplify/easy-coding-standard": "^5.0",
 
