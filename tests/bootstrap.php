@@ -13,7 +13,7 @@ Tester\Environment::setup();
 $tempDir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'temp', Nette\Utils\Random::generate()]);
 
 if (!file_exists($tempDir)) {
-    mkdir($tempDir);
+    mkdir($tempDir, 0777, true);
 }
 
 $configurator = new Nette\Configurator;
