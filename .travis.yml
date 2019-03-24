@@ -43,7 +43,7 @@ jobs:
 
     - stage: Test Coverage
       if: branch = master AND type = push
-      php: 7.1
+      php: 7.2
       script:
         - vendor/bin/tester -s -p php --colors 1 -C -d extension=xdebug.so --coverage ./coverage.xml --coverage-src ./src ./tests/cases
       after_script:
