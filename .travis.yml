@@ -28,6 +28,7 @@ jobs:
       install:
         - travis_retry composer update --no-progress --prefer-dist --prefer-lowest
       script:
+        - "echo -n -e \"parameters:\n\tmailchimpApiKey: ${MAILCHIMP_API_KEY}\n\tmailchimpTestList: ${MAILCHIMP_TEST_LIST}\" > 'tests/config/config.local.neon'"
         - vendor/bin/tester -s -p php --colors 1 ./tests/cases
 
     - stage: Quality Assurance
