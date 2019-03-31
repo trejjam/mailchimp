@@ -43,6 +43,8 @@
 			"Trejjam\\MailChimp\\Tests\\": "tests/src/"
 		}
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"scripts": {
 		"phpstan-install": [
 			"mkdir -p temp/phpstan",
