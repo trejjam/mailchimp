@@ -53,6 +53,7 @@ final class MailChimpExtension extends BaseExtension
         if (!method_exists(parent::class, 'getConfigSchema')) {
             // pre Nette 3.0 compatibility
             $this->shadowConfig = $this->config;
+            $this->config = [];
         }
     }
 

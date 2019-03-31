@@ -40,6 +40,9 @@ parameters:
 		- # pre Nette 3.0 compatibility
 			message: '~^Static method Nette\\DI\\Compiler::loadDefinition\(\) invoked with 2 parameters, 0 required\.$~'
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: '~^Property Trejjam\\MailChimp\\DI\\MailChimpExtension::\$config \(Trejjam\\MailChimp\\DI\\ExtensionConfiguration\) does not accept array\.$~'
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 
 	earlyTerminatingMethodCalls:
 		Nette\Application\UI\Presenter:
