@@ -15,7 +15,7 @@ $container = require __DIR__ . '/../bootstrap.php';
 
 final class DITest extends TestCase
 {
-	private const NAME = 'trejjam.ares';
+	private const NAME = 'trejjam.mailchimp';
 
 	public function testConfig() : void
 	{
