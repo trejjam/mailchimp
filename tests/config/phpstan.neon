@@ -23,7 +23,7 @@ parameters:
 			message: "~^Call to function method_exists\\(\\) with 'Trejjam…' and 'getConfigSchema' will always evaluate to false.$~"
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 		- # pre Nette 3.0 compatibility
-			message: "~^Call to function method_exists\\(\\) with \\$this\\(Trejjam\\\\MailChimp\\\\DI\\\\MailChimpExtension\\) and 'loadDefinitionsFrom…' will always evaluate to true.$~"
+			message: "~^Call to function method_exists\\(\\) with \\$this\\(Trejjam\\\\MailChimp\\\\DI\\\\MailChimpExtension\\) and 'loadDefinitionsFrom…' will always evaluate to false.$~"
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 		- # pre Nette 3.0 compatibility
 			message: ~^Cannot access offset '.*' on Trejjam\\MailChimp\\DI\\ExtensionConfiguration\.$~
@@ -35,13 +35,13 @@ parameters:
 			message: ~^Casting to Trejjam\\MailChimp\\DI\\HttpClientConfiguration something that's already Trejjam\\MailChimp\\DI\\HttpClientConfiguration\.$~
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 		- # pre Nette 3.0 compatibility
-			message: '~^Call to deprecated method loadDefinition\(\) of class Nette\\DI\\Compiler\.$~'
-			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
-		- # pre Nette 3.0 compatibility
-			message: '~^Static method Nette\\DI\\Compiler::loadDefinition\(\) invoked with 2 parameters, 0 required\.$~'
-			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
-		- # pre Nette 3.0 compatibility
 			message: '~^Property Trejjam\\MailChimp\\DI\\MailChimpExtension::\$config \(Trejjam\\MailChimp\\DI\\ExtensionConfiguration\) does not accept array\.$~'
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: '~^Call to static method from\(\) on an unknown class Nette\\DI\\Config\\Expect\.$~'
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: '~^Return typehint of method Trejjam\\MailChimp\\DI\\MailChimpExtension::getConfigSchema\(\) has invalid type Nette\\DI\\Config\\Schema\.$~'
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 
 	earlyTerminatingMethodCalls:
