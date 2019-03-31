@@ -4,9 +4,6 @@ parameters:
 	ignoreErrors:
 		- '~^Property Trejjam\\MailChimp\\Entity\\[a-zA-Z\\]+::\$[a-z]+ has no typehint specified\.$~'
 		-
-			message: ~^Property Trejjam\\MailChimp\\DI\\MailChimpExtension::\$default has no typehint specified\.$~
-			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
-		-
 			message: '~^Method Trejjam\\MailChimp\\Exception\\NotFoundException::__construct\(\) has parameter \$message with no typehint specified\.$~'
 			path: %currentWorkingDirectory%/src/Exception/NotFoundException.php
 		-
@@ -21,6 +18,28 @@ parameters:
 		-
 			message: '~^Method Trejjam\\MailChimp\\Entity\\Entries::toArray\(\) should return array<Schematic\\Entry> but returns array<array|Schematic\\Entry>\.$~'
 			path: %currentWorkingDirectory%/src/Entity/Entries.php
+
+		- # pre Nette 3.0 compatibility
+			message: "~^Call to function method_exists\\(\\) with 'Trejjam…' and 'getConfigSchema' will always evaluate to false.$~"
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: "~^Call to function method_exists\\(\\) with \\$this\\(Trejjam\\\\MailChimp\\\\DI\\\\MailChimpExtension\\) and 'loadDefinitionsFrom…' will always evaluate to true.$~"
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: ~^Cannot access offset '.*' on Trejjam\\MailChimp\\DI\\ExtensionConfiguration\.$~
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: ~^Casting to Trejjam\\MailChimp\\DI\\ExtensionConfiguration something that's already Trejjam\\MailChimp\\DI\\ExtensionConfiguration\.$~
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: ~^Casting to Trejjam\\MailChimp\\DI\\HttpClientConfiguration something that's already Trejjam\\MailChimp\\DI\\HttpClientConfiguration\.$~
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: '~^Call to deprecated method loadDefinition\(\) of class Nette\\DI\\Compiler\.$~'
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: '~^Static method Nette\\DI\\Compiler::loadDefinition\(\) invoked with 2 parameters, 0 required\.$~'
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 
 	earlyTerminatingMethodCalls:
 		Nette\Application\UI\Presenter:
