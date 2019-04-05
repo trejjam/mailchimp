@@ -5,8 +5,8 @@ namespace Trejjam\MailChimp\DI;
 
 use GuzzleHttp;
 use Nette\DI\Compiler;
-use Nette\DI\Config\Expect;
-use Nette\DI\Config\Schema;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 use Trejjam\BaseExtension\DI\BaseExtension;
@@ -59,7 +59,7 @@ final class MailChimpExtension extends BaseExtension
 
     public function getConfigSchema() : Schema
     {
-        return Expect::from($this->config)->normalize(
+        return Expect::from($this->config)->before(
             function (array $config) {
                 if (true === ($config['findDataCenter'] ?? $this->config->findDataCenter)) {
                     // unable to find, possible use of neon parameter, which will be expanded later

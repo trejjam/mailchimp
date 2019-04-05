@@ -40,11 +40,7 @@ jobs:
         - travis_retry composer require nette/di:^3.0
         - travis_retry composer update --no-progress --prefer-dist
 
-        - mkdir -p temp/phpstan
-        - composer init -d temp/phpstan -n
-        - composer config  -d temp/phpstan minimum-stability RC
-        - travis_retry composer require -d temp/phpstan nette/di:^3.0
-        - composer run-script phpstan-install
+        - travis_retry composer run-script phpstan-install
 
         - "echo -n -e \"parameters:\n\tmailchimpApiKey: ${MAILCHIMP_API_KEY}\n\tmailchimpTestList: ${MAILCHIMP_TEST_LIST}\" > 'tests/config/config.local.neon'"
       script:
