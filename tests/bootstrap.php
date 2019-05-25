@@ -14,11 +14,11 @@ $tempDir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'temp', Nette\Utils\Random::ge
 $logDir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'log']);
 
 if (!file_exists($tempDir)) {
-    mkdir($tempDir, 0777, true);
+    @mkdir($tempDir, 0777, true);
 }
 
 if (!file_exists($logDir)) {
-    mkdir($logDir, 0777, true);
+    @mkdir($logDir, 0777, true);
 }
 
 $configurator = new Nette\Configurator;
