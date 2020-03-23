@@ -2,16 +2,19 @@ parameters:
 	reportUnmatchedIgnoredErrors: false
 	ignoreErrors:
 		- # pre Nette 3.0 compatibility
-			message: "~^Call to function method_exists\\(\\) with \\$this\\(Trejjam\\\\MailChimp\\\\DI\\\\MailChimpExtension\\) and 'loadDefinitionsFrom…' will always evaluate to true.$~"
+			message: "~^Call to function method_exists\\(\\) with 'Trejjam…' and 'getConfigSchema' will always evaluate to true\\.$~"
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 		- # pre Nette 3.0 compatibility
-			message: '~^Call to deprecated method loadDefinition\(\) of class Nette\\DI\\Compiler\.$~'
+			message: "~^Call to function method_exists\\(\\) with \\$this\\(Trejjam\\\\MailChimp\\\\DI\\\\MailChimpExtension\\) and 'loadDefinitionsFrom…' will always evaluate to true\\.$~"
+			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
+		- # pre Nette 3.0 compatibility
+			message: '~^Call to deprecated method loadDefinition\(\) of class Nette\\DI\\Compiler:\nuse non-static Compiler::loadDefinitionsFromConfig\(\)$~'
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 		- # pre Nette 3.0 compatibility
 			message: '~^Static method Nette\\DI\\Compiler::loadDefinition\(\) invoked with 2 parameters, 0 required\.$~'
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 		- # pre Nette 3.0 compatibility
-			message: '~^Call to deprecated method validateConfig\(\) of class Nette\\DI\\CompilerExtension\.$~'
+			message: '~^Call to deprecated method validateConfig\(\) of class Nette\\DI\\CompilerExtension:\nuse getConfigSchema\(\)~'
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 
 includes:

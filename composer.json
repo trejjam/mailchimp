@@ -28,6 +28,12 @@
 
 		"nette/tester": "^2.2",
 
+		"phpstan/phpstan": "^0.12",
+		"phpstan/phpstan-deprecation-rules": "^0.12",
+		"phpstan/phpstan-strict-rules": "^0.12",
+		"thecodingmachine/phpstan-safe-rule": "^1",
+		"roave/no-floaters": "^1.1.0",
+
 		"symplify/easy-coding-standard": "^7.0",
 
 		"sensiolabs/security-checker": "^6.0",
@@ -46,16 +52,8 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"scripts": {
-		"phpstan-install": [
-			"mkdir -p temp/phpstan",
-			"composer require -d temp/phpstan phpstan/phpstan:0.11",
-			"composer require -d temp/phpstan phpstan/phpstan-deprecation-rules:0.11",
-			"composer require -d temp/phpstan phpstan/phpstan-strict-rules:0.11",
-			"composer require -d temp/phpstan thecodingmachine/phpstan-safe-rule:0.1.3",
-			"composer require -d temp/phpstan roave/no-floaters:1.1.0"
-		],
 		"phpstan": [
-			"temp/phpstan/vendor/bin/phpstan analyse -l max -c tests/config/phpstan.neon src tests/src tests/cases"
+			"vendor/bin/phpstan analyse -l max -c tests/config/phpstan.neon src tests/src tests/cases"
 		]
 	},
 	"extra": {
