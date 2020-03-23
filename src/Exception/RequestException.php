@@ -13,8 +13,6 @@ final class RequestException extends \LogicException
     private $httpResponse;
 
     /**
-     * @param Psr\Http\Message\ResponseInterface $httpResponse
-     *
      * @return $this
      * @internal
      */
