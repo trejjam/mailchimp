@@ -192,25 +192,25 @@ final class Lists
         }
     }
 
-	/**
-	 * @throws JsonException
-	 * @throws MemberNotFoundException
-	 * @throws RequestException
-	 */
-	public function removePermanentMember(MemberItem $memberItem) : ?array
-	{
-		try {
-			return $this->apiRequest->post($this->getDeleteOneMemberPermanentEndpointPath($memberItem->list_id, $memberItem->id), []);
-		} catch (ClientException $clientException) {
-			throw new MemberNotFoundException("Member '{$memberItem->id}' not found in the list '{$memberItem->list_id}'", $clientException);
-		} catch (RequestException $requestException) {
-			if ($requestException->getCode() === 204) {
-				return null;
-			}
+    /**
+     * @throws JsonException
+     * @throws MemberNotFoundException
+     * @throws RequestException
+     */
+    public function removePermanentMember(MemberItem $memberItem) : ?array
+    {
+        try {
+            return $this->apiRequest->post($this->getDeleteOneMemberPermanentEndpointPath($memberItem->list_id, $memberItem->id), []);
+        } catch (ClientException $clientException) {
+            throw new MemberNotFoundException("Member '{$memberItem->id}' not found in the list '{$memberItem->list_id}'", $clientException);
+        } catch (RequestException $requestException) {
+            if ($requestException->getCode() === 204) {
+                return null;
+            }
 
-			throw $requestException;
-		}
-	}
+            throw $requestException;
+        }
+    }
 
     /**
      * @throws JsonException
@@ -329,10 +329,10 @@ final class Lists
         return $this->getMemberEndpointPath($listId) . "/{$memberHash}";
     }
 
-	private function getDeleteOneMemberPermanentEndpointPath(string $listId, string $memberHash) : string
-	{
-		return $this->getOneMemberEndpointPath($listId, $memberHash) . "/actions/delete-permanent";
-	}
+    private function getDeleteOneMemberPermanentEndpointPath(string $listId, string $memberHash) : string
+    {
+        return $this->getOneMemberEndpointPath($listId, $memberHash) . '/actions/delete-permanent';
+    }
 
     private function getSegmentEndpointPath(string $listId) : string
     {

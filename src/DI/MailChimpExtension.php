@@ -60,7 +60,7 @@ final class MailChimpExtension extends BaseExtension
     public function getConfigSchema() : Schema
     {
         return Expect::from($this->config)->before(
-			function (array $config) : array {
+            function (array $config) : array {
                 if (true === ($config['findDataCenter'] ?? $this->config->findDataCenter)) {
                     // unable to find, possible use of neon parameter, which will be expanded later
                     $config['apiUrl'] = $this->config->apiUrlTemplate;
@@ -113,7 +113,7 @@ final class MailChimpExtension extends BaseExtension
 
         if ($this->config->findDataCenter === true) {
             $accountDataCenter = Strings::match($this->config->apiKey, '~-(us(?:\d+))$~');
-			assert($accountDataCenter !== null);
+            assert($accountDataCenter !== null);
             $this->config->apiUrl = sprintf($this->config->apiUrlTemplate, $accountDataCenter[1], MailChimp\Request::VERSION);
         }
 
