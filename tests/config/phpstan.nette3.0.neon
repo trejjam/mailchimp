@@ -2,7 +2,7 @@ parameters:
 	reportUnmatchedIgnoredErrors: false
 	ignoreErrors:
 		- # pre Nette 3.0 compatibility
-			message: "~^Call to function method_exists\\(\\) with 'Trejjam…' and 'getConfigSchema' will always evaluate to true\\.$~"
+			message: "~^Call to function method_exists\\(\\) with 'Trejjam\\\\BaseExtension\\\\DI\\\\BaseExtension' and 'getConfigSchema' will always evaluate to true\\.$~"
 			path: %currentWorkingDirectory%/src/DI/MailChimpExtension.php
 		- # pre Nette 3.0 compatibility
 			message: "~^Call to function method_exists\\(\\) with \\$this\\(Trejjam\\\\MailChimp\\\\DI\\\\MailChimpExtension\\) and 'loadDefinitionsFrom…' will always evaluate to true\\.$~"
