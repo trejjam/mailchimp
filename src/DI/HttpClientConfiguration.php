@@ -8,9 +8,13 @@ use Nette\DI\Statement;
 
 final class HttpClientConfiguration
 {
-    /** @var string|array|Statement|null */
+    /**
+     * @var string|array|Statement|null
+     */
     public $clientFactory = null;
-    /** @var array */
+    /**
+     * @var array
+     */
     public $client = [];
 
     public function __construct()

@@ -15,7 +15,7 @@
 		"php": ">=7.1",
 
 		"composer/ca-bundle": "^1.1",
-		"nette/di": "^2.4.10 || ^3.0",
+		"nette/di": "^3.0",
 		"guzzlehttp/guzzle": "^6.3",
 		"trejjam/base-extension": "^0.8",
 		"tharos/schematic": "^1.2",

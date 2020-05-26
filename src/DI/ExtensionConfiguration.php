@@ -5,13 +5,21 @@ namespace Trejjam\MailChimp\DI;
 
 final class ExtensionConfiguration
 {
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $findDataCenter = true;
-    /** @var string */
+    /**
+     * @var string
+     */
     public $apiUrlTemplate = 'https://%s.api.mailchimp.com/%s/';
-    /** @var string */
+    /**
+     * @var string
+     */
     public $apiUrl;
-    /** @var string */
+    /**
+     * @var string
+     */
     public $apiKey;
 
     /**
@@ -20,9 +28,13 @@ final class ExtensionConfiguration
      * @var string[]
      */
     public $lists = [];
-    /** @var string[][]|int[][] */
+    /**
+     * @var string[][]|int[][]
+     */
     public $segments = [];
-    /** @var HttpClientConfiguration */
+    /**
+     * @var HttpClientConfiguration
+     */
     public $http;
 
     public function __construct()
