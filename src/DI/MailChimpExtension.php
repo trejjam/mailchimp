@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Trejjam\MailChimp\DI;
 
 use GuzzleHttp;
-use Nette\DI\Compiler;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Nette\Utils\Strings;
@@ -39,22 +38,9 @@ final class MailChimpExtension extends BaseExtension
 
     ];
 
-    /**
-     * pre Nette 3.0 compatibility
-     *
-     * @var ExtensionConfiguration
-     */
-    private $shadowConfig;
-
     public function __construct()
     {
         $this->config = new ExtensionConfiguration();
-
-        if (!method_exists(parent::class, 'getConfigSchema')) {
-            // pre Nette 3.0 compatibility
-            $this->shadowConfig = $this->config;
-            $this->config = [];
-        }
     }
 
     public function getConfigSchema() : Schema
@@ -80,37 +66,6 @@ final class MailChimpExtension extends BaseExtension
      */
     public function loadConfiguration(bool $validateConfig = true) : void
     {
-        if (!method_exists(parent::class, 'getConfigSchema')) {
-            // pre Nette 3.0 compatibility
-
-            $config = (array)$this->shadowConfig;
-            $config['http'] = (array)$this->shadowConfig->http;
-            $this->validateConfig($config);
-
-            Validators::assert($this->config['apiUrlTemplate'], 'string', 'apiUrl');
-            Validators::assert($this->config['apiKey'], 'string', 'apiKey');
-            Validators::assert($this->config['lists'], 'array', 'list');
-            Validators::assert($this->config['segments'], 'array', 'segments');
-            Validators::assert($this->config['http']['clientFactory'], 'null|string|array|Nette\DI\Statement', 'http.client');
-
-            foreach ($this->config['lists'] as $listName => $listId) {
-                Validators::assert($listId, 'string', 'lists-' . $listName);
-            }
-
-            foreach ($this->config['segments'] as $listName => $segments) {
-                foreach ($segments as $segmentId) {
-                    Validators::assert($segmentId, 'string|integer', $listName);
-                }
-            }
-
-            if ($this->config['findDataCenter'] !== true) {
-                Validators::assert($this->config['apiUrl'], 'string', 'apiUrl');
-            }
-
-            $this->config = (object) $this->config;
-            $this->config->http = (object) $this->config->http;
-        }
-
         if ($this->config->findDataCenter === true) {
             $accountDataCenter = Strings::match($this->config->apiKey, '~-(us(?:\d+))$~');
             assert($accountDataCenter !== null);
@@ -135,18 +90,11 @@ final class MailChimpExtension extends BaseExtension
                 $types['http.client']->setFactory($this->config->http->clientFactory);
             }
             else {
-                if (!method_exists($this, 'loadDefinitionsFromConfig')) {
-                    // pre Nette 3.0 compatibility
-
-                    Compiler::loadDefinition($types['http.client'], $this->config->http->clientFactory);
-                }
-                else {
                     $this->loadDefinitionsFromConfig(
                         [
                             'http.client' => $this->config->http->clientFactory,
                         ]
                     );
-                }
             }
         }
 
