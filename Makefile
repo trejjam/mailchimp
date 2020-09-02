@@ -13,7 +13,7 @@ sensiolab:
 	XDEBUG_CONFIG="remote_enable=0" vendor/bin/security-checker security:check composer.lock
 
 ecs:
-	XDEBUG_CONFIG="remote_enable=0" vendor/bin/ecs check --config=tests/config/easy-coding-standard.yml \
+	XDEBUG_CONFIG="remote_enable=0" vendor/bin/ecs check --config=tests/config/easy-coding-standard.php \
 		src \
 		tests/src tests/cases ${ECS_PARAM}
 
