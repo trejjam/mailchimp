@@ -16,7 +16,7 @@
 
 		"composer/ca-bundle": "^1.1",
 		"nette/di": "^3.0",
-		"guzzlehttp/guzzle": "^6.3",
+		"guzzlehttp/guzzle": "^7.0",
 		"trejjam/base-extension": "^0.8",
 		"tharos/schematic": "^1.2",
 		"thecodingmachine/safe": "^1.0"
