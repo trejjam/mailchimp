@@ -1,15 +1,8 @@
 parameters:
 	checkMissingIterableValueType: false
-	autoload_directories:
-		- %rootDir%/../../../src/
+	treatPhpDocTypesAsCertain: false
 	ignoreErrors:
 		- '~^Property Trejjam\\MailChimp\\Entity\\[a-zA-Z\\]+::\$[a-z]+ has no typehint specified\.$~'
-		-
-			message: '~^Method Trejjam\\MailChimp\\Exception\\NotFoundException::__construct\(\) has parameter \$message with no typehint specified\.$~'
-			path: %currentWorkingDirectory%/src/Exception/NotFoundException.php
-		-
-			message: '~^Method Trejjam\\MailChimp\\Exception\\NotFoundException::__construct\(\) has parameter \$code with no typehint specified\.$~'
-			path: %currentWorkingDirectory%/src/Exception/NotFoundException.php
 		-
 			message: '~^Method Trejjam\\MailChimp\\Entity\\AEntity::__set\(\) has parameter \$value with no typehint specified\.$~'
 			path: %currentWorkingDirectory%/src/Entity/AEntity.php
