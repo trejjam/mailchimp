@@ -3,6 +3,7 @@ php:
   - 7.2
   - 7.3
   - 7.4
+  - nightly
 
 before_install:
   # Turn off XDebug
@@ -60,6 +61,7 @@ jobs:
 
   allow_failures:
     - stage: Test Coverage
+    - php: nightly
 
 sudo: false
 
