@@ -1,18 +1,20 @@
 {
 	"name": "trejjam/mail-chimp",
-	"description": "MailChimp client for Nette",
+	"description": "MailChimp integration into Nette framework",
 	"keywords": [
 		"nette",
 		"mailChimp"
 	],
+	"type": "library",
 	"license": "MIT",
 	"authors": [
 		{
-			"name": "Jan Trejbal"
+			"name": "Jan Trejbal",
+			"homepage": "https://github.com/trejjam"
 		}
 	],
 	"require": {
-		"php": ">=7.3 || >=8.0",
+		"php": "^7.3 | ^8.0",
 
 		"composer/ca-bundle": "^1.1",
 		"nette/di": "^3.0",
@@ -50,10 +52,8 @@
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
-	"scripts": {
-		"phpstan": [
-			"vendor/bin/phpstan analyse -l max -c tests/config/phpstan.neon src tests/src tests/cases"
-		]
+	"config": {
+		"sort-packages": true
 	},
 	"extra": {
 		"branch-alias": {
