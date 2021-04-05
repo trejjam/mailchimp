@@ -12,7 +12,7 @@
 		}
 	],
 	"require": {
-		"php": ">=7.1 || >=8.0",
+		"php": ">=7.3 || >=8.0",
 
 		"composer/ca-bundle": "^1.1",
 		"nette/di": "^3.0",
@@ -34,9 +34,8 @@
 		"thecodingmachine/phpstan-safe-rule": "^1",
 		"roave/no-floaters": "^1.1.0",
 
-		"symplify/easy-coding-standard": "^8.0",
+		"symplify/easy-coding-standard": "^9.2",
 
-		"sensiolabs/security-checker": "^6.0",
 		"roave/security-advisories": "dev-master"
 	},
 	"autoload": {

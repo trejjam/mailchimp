@@ -1,5 +1,6 @@
 parameters:
-	mailchimpApiKey: 'someApiKey123-us11'
+	mailchimpApiKey: %ENV.MAILCHIMP_API_KEY%
+	mailchimpTestList: %ENV.MAILCHIMP_TEST_LIST%
 
 extensions:
 	trejjam.mailchimp: Trejjam\MailChimp\DI\MailChimpExtension

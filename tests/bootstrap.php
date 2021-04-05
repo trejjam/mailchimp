@@ -32,6 +32,13 @@ $configurator->createRobotLoader()
     ->register();
 
 $configurator->addConfig(__DIR__ . '/config/config.neon');
-$configurator->addConfig(__DIR__ . '/config/config.local.neon');
+if (file_exists(__DIR__ . '/config/config.local.neon')) {
+    $configurator->addConfig(__DIR__ . '/config/config.local.neon');
+}
+$configurator->addParameters([
+    'ENV' => array_filter(getenv(), function (string $key): bool {
+        return Nette\Utils\Strings::startsWith($key, 'MAILCHIMP_');
+    }, ARRAY_FILTER_USE_KEY),
+]);
 
 return $configurator->createContainer();
