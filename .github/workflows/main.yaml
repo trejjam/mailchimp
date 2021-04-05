@@ -264,6 +264,9 @@ jobs:
 
       - name: "Tests"
         run: "make coverage-clover"
+        env:
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          MAILCHIMP_TEST_LIST: ${{ secrets.MAILCHIMP_TEST_LIST }}
 
       - name: "Coveralls.io"
         env:
