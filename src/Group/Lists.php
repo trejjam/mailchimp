@@ -40,7 +40,7 @@ final class Lists
      */
     public function getAll(?PaginationOption $paginationOption = null) : EntityLists
     {
-        return $this->apiRequest->get($this->getEndpointPath(), EntityLists::class, $paginationOption);
+        return $this->apiRequest->getTyped($this->getEndpointPath(), EntityLists::class, $paginationOption);
     }
 
     public function getAllIterator(string $listId) : \Generator
@@ -75,7 +75,7 @@ final class Lists
     public function get(string $listId) : ListItem
     {
         try {
-            return $this->apiRequest->get($this->getListEndpointPath($listId), ListItem::class);
+            return $this->apiRequest->getTyped($this->getListEndpointPath($listId), ListItem::class);
         } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
@@ -88,7 +88,7 @@ final class Lists
     public function getMembers(string $listId, ?PaginationOption $paginationOption = null) : EntityMemberLists
     {
         try {
-            return $this->apiRequest->get($this->getMemberEndpointPath($listId), EntityMemberLists::class, $paginationOption);
+            return $this->apiRequest->getTyped($this->getMemberEndpointPath($listId), EntityMemberLists::class, $paginationOption);
         } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
@@ -126,7 +126,7 @@ final class Lists
     public function getMember(string $listId, string $memberHash) : MemberItem
     {
         try {
-            return $this->apiRequest->get($this->getOneMemberEndpointPath($listId, $memberHash), MemberItem::class);
+            return $this->apiRequest->getTyped($this->getOneMemberEndpointPath($listId, $memberHash), MemberItem::class);
         } catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberHash}' not found in the list '{$listId}'", $clientException);
         }
@@ -139,7 +139,7 @@ final class Lists
     public function addMember(MemberItem $memberItem) : MemberItem
     {
         try {
-            return $this->apiRequest->put(
+            return $this->apiRequest->putTyped(
                 $this->getOneMemberEndpointPath(
                     $memberItem->list_id,
                     $memberItem->id
@@ -159,7 +159,7 @@ final class Lists
     public function updateMember(MemberItem $memberItem) : MemberItem
     {
         try {
-            return $this->apiRequest->patch(
+            return $this->apiRequest->patchTyped(
                 $this->getOneMemberEndpointPath(
                     $memberItem->list_id,
                     $memberItem->id
@@ -219,7 +219,7 @@ final class Lists
     public function getSegments(string $listId, ?PaginationOption $paginationOption = null) : EntitySegmentLists
     {
         try {
-            return $this->apiRequest->get($this->getSegmentEndpointPath($listId), EntitySegmentLists::class, $paginationOption);
+            return $this->apiRequest->getTyped($this->getSegmentEndpointPath($listId), EntitySegmentLists::class, $paginationOption);
         } catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
@@ -257,7 +257,7 @@ final class Lists
     public function getSegment(string $listId, int $segmentId) : Segment
     {
         try {
-            return $this->apiRequest->get($this->getOneSegmentEndpointPath($listId, $segmentId), Segment::class);
+            return $this->apiRequest->getTyped($this->getOneSegmentEndpointPath($listId, $segmentId), Segment::class);
         } catch (ClientException $clientException) {
             throw new ListNotFoundException("Segment '{$segmentId}' not found in the list '{$listId}'", $clientException);
         }
@@ -275,7 +275,7 @@ final class Lists
         }
 
         try {
-            return $this->apiRequest->post(
+            return $this->apiRequest->postTyped(
                 $this->getSegmentEndpointPath($listId),
                 [
                     'name'           => $segmentName,
@@ -295,7 +295,7 @@ final class Lists
     public function addSegmentMember(int $segmentId, MemberItem $memberItem) : MemberItem
     {
         try {
-            return $this->apiRequest->post(
+            return $this->apiRequest->postTyped(
                 $this->getOneSegmentEndpointPath($memberItem->list_id, $segmentId) . self::GROUP_MEMBER_PREFIX,
                 [
                     'email_address' => $memberItem->email_address,

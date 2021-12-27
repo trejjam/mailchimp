@@ -2,15 +2,14 @@ parameters:
 	checkMissingIterableValueType: false
 	treatPhpDocTypesAsCertain: false
 	ignoreErrors:
-		- '~^Property Trejjam\\MailChimp\\Entity\\[a-zA-Z\\]+::\$[a-z]+ has no typehint specified\.$~'
 		-
-			message: '~^Method Trejjam\\MailChimp\\Entity\\AEntity::__set\(\) has parameter \$value with no typehint specified\.$~'
+			message: '~^Method Trejjam\\MailChimp\\Entity\\AEntity::__set\(\) has parameter \$value with no type specified\.$~'
 			path: %currentWorkingDirectory%/src/Entity/AEntity.php
 		-
-			message: '~^Method Trejjam\\MailChimp\\Entity\\AEntity::__get\(\) has no return typehint specified\.$~'
+			message: '~^Method Trejjam\\MailChimp\\Entity\\AEntity::__get\(\) has no return type specified\.$~'
 			path: %currentWorkingDirectory%/src/Entity/AEntity.php
 		-
-			message: '~^Method Trejjam\\MailChimp\\Entity\\Entries::toArray\(\) should return array<Schematic\\Entry> but returns array<array|Schematic\\Entry>\.$~'
+			message: '~^Method Trejjam\\MailChimp\\Entity\\Entries::toArray\(\) should return array<string, Schematic\\Entry> but returns array<array\|Schematic\\Entry>\.$~'
 			path: %currentWorkingDirectory%/src/Entity/Entries.php
 
 	earlyTerminatingMethodCalls:

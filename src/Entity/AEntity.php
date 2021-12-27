@@ -12,6 +12,9 @@ abstract class AEntity
      */
     protected $readOnly = [];
 
+    /**
+     * @var array<string, array<class-string>|class-string>
+     */
     protected $associations = [];
 
     /**

@@ -24,6 +24,6 @@ final class Root
      */
     public function get() : EntityRoot
     {
-        return $this->apiRequest->get('/', EntityRoot::class);
+        return $this->apiRequest->getTyped('/', EntityRoot::class);
     }
 }
