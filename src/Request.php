@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Trejjam\MailChimp;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Nette\Utils\Json;
 use Nette\Utils\JsonException;
-use Schematic\Entry;
 use Trejjam\MailChimp\Exception\RequestException;
 
 final class Request
@@ -32,74 +32,121 @@ final class Request
         Client $httpClient,
         string $apiUrl,
         string $apiKey
-    ) {
+    )
+    {
         $this->httpClient = $httpClient;
         $this->apiUrl = $apiUrl;
         $this->apiKey = $apiKey;
     }
 
     /**
-     * @return array|Entry|mixed
+     * @template T
+     * @param class-string<T> $endpointClass
+     * @return T
      * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
      */
-    public function get(string $endpointPath, ?string $endpointClass = null, ?PaginationOption $paginationOption = null)
+    public function getTyped(string $endpointPath, string $endpointClass, ?PaginationOption $paginationOption = null)
     {
-        return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass, [], $paginationOption);
+        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [], $paginationOption);
     }
 
     /**
-     * @return array|mixed|Entry
+     * @template T
+     * @param class-string<T> $endpointClass
+     * @return T
      * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
      */
-    public function put(string $endpointPath, array $body, ?string $endpointClass = null)
+    public function putTyped(string $endpointPath, array $body, string $endpointClass)
     {
-        return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [
             RequestOptions::BODY => Json::encode($body),
         ]);
     }
 
     /**
-     * @return array|mixed|Entry
+     * @template T
+     * @param class-string<T> $endpointClass
+     * @return T
      * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
      */
-    public function patch(string $endpointPath, array $body, ?string $endpointClass = null)
+    public function patchTyped(string $endpointPath, array $body, string $endpointClass)
     {
-        return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [
             RequestOptions::BODY => Json::encode($body),
         ]);
     }
 
     /**
-     * @return array|mixed|Entry
+     * @return array
      * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
      */
-    public function post(string $endpointPath, array $body, ?string $endpointClass = null)
+    public function post(string $endpointPath, array $body)
     {
-        return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+        return $this->makeRequest(__FUNCTION__, $endpointPath, [
             RequestOptions::BODY => Json::encode($body),
         ]);
     }
 
     /**
-     * @return array|Entry|mixed
+     * @template T
+     * @param class-string<T> $endpointClass
+     * @return T
      * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
      */
-    public function delete(string $endpointPath, ?string $endpointClass = null)
+    public function postTyped(string $endpointPath, array $body, string $endpointClass)
     {
-        return $this->makeRequest(__FUNCTION__, $endpointPath, $endpointClass);
+        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+            RequestOptions::BODY => Json::encode($body),
+        ]);
     }
 
     /**
-     * @return array|Entry|mixed
+     * @return array
      * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    public function delete(string $endpointPath)
+    {
+        return $this->makeRequest(__FUNCTION__, $endpointPath);
+    }
+
+    /**
+     * @template T
+     * @param class-string<T> $endpointClass
+     * @return T
+     * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    public function deleteTyped(string $endpointPath, string $endpointClass)
+    {
+        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass);
+    }
+
+    /**
+     * @return array
+     * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
      */
     private function makeRequest(
-        string $method,
-        string $endpointPath,
-        ?string $endpointClass = null,
-        array $requestOptions = [],
+        string            $method,
+        string            $endpointPath,
+        array             $requestOptions = [],
         ?PaginationOption $paginationOption = null
-    ) {
+    )
+    {
         $mergedRequestOptions = array_merge_recursive(
             [
                 RequestOptions::AUTH => [self::API_USER, $this->apiKey],
@@ -124,11 +171,26 @@ final class Request
             ))->setResponse($response);
         }
 
-        $returnArray = Json::decode($response->getBody()->getContents(), Json::FORCE_ARRAY);
+        return (array)Json::decode($response->getBody()->getContents(), Json::FORCE_ARRAY);
+    }
 
-        if ($endpointClass === null || $endpointClass === '') {
-            return $returnArray;
-        }
+    /**
+     * @template T
+     * @param class-string<T> $endpointClass
+     * @return T
+     * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    private function makeTypedRequest(
+        string            $method,
+        string            $endpointPath,
+        string            $endpointClass,
+        array             $requestOptions = [],
+        ?PaginationOption $paginationOption = null
+    )
+    {
+        $returnArray = $this->makeRequest($method, $endpointPath, $requestOptions, $paginationOption);
 
         return new $endpointClass($returnArray);
     }

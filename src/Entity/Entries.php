@@ -8,7 +8,7 @@ use Schematic;
 final class Entries extends Schematic\Entries
 {
     /**
-     * @return Schematic\Entry[]
+     * @return array<string, Schematic\Entry>
      */
     public function toArray() : array
     {
