@@ -21,7 +21,7 @@
 		"guzzlehttp/guzzle": "^7.0",
 		"trejjam/base-extension": "^0.8",
 		"tharos/schematic": "^1.2",
-		"thecodingmachine/safe": "^1.0"
+		"thecodingmachine/safe": "^1.0 || ^2.0"
 	},
 	"require-dev": {
 		"nette/robot-loader": "^3.1",
