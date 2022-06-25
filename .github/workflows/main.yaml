@@ -199,7 +199,7 @@ jobs:
         run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'
 
       - name: "Tests"
-        run: "make tests"
+        run: "make test"
         env:
           MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
           MAILCHIMP_TEST_LIST: ${{ secrets.MAILCHIMP_TEST_LIST }}
