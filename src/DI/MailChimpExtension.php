@@ -87,14 +87,14 @@ final class MailChimpExtension extends BaseExtension
 
         if ($this->config->http->clientFactory !== null) {
             if (is_string($this->config->http->clientFactory) && Strings::startsWith($this->config->http->clientFactory, '@')) {
-                $types['http.client']->setFactory($this->config->http->clientFactory);
+                $types['http.client']->setCreator($this->config->http->clientFactory);
             }
             else {
-                    $this->loadDefinitionsFromConfig(
-                        [
-                            'http.client' => $this->config->http->clientFactory,
-                        ]
-                    );
+                $this->loadDefinitionsFromConfig(
+                    [
+                        'http.client' => $this->config->http->clientFactory,
+                    ]
+                );
             }
         }
 
