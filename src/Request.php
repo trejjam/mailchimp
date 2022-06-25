@@ -59,7 +59,7 @@ final class Request
      */
     public function getTyped(string $endpointPath, string $endpointClass, ?PaginationOption $paginationOption = null)
     {
-        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [], $paginationOption);
+        return $this->makeTypedRequest('get', $endpointPath, $endpointClass, [], $paginationOption);
     }
 
     /**
@@ -72,7 +72,7 @@ final class Request
      */
     public function putTyped(string $endpointPath, array $body, string $endpointClass)
     {
-        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+        return $this->makeTypedRequest('put', $endpointPath, $endpointClass, [
             RequestOptions::BODY => Json::encode($body),
         ]);
     }
@@ -87,7 +87,7 @@ final class Request
      */
     public function patchTyped(string $endpointPath, array $body, string $endpointClass)
     {
-        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+        return $this->makeTypedRequest('patch', $endpointPath, $endpointClass, [
             RequestOptions::BODY => Json::encode($body),
         ]);
     }
@@ -115,7 +115,7 @@ final class Request
      */
     public function postTyped(string $endpointPath, array $body, string $endpointClass)
     {
-        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass, [
+        return $this->makeTypedRequest('post', $endpointPath, $endpointClass, [
             RequestOptions::BODY => Json::encode($body),
         ]);
     }
@@ -141,7 +141,7 @@ final class Request
      */
     public function deleteTyped(string $endpointPath, string $endpointClass)
     {
-        return $this->makeTypedRequest(__FUNCTION__, $endpointPath, $endpointClass);
+        return $this->makeTypedRequest('delete', $endpointPath, $endpointClass);
     }
 
     /**
