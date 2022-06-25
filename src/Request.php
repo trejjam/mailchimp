@@ -40,6 +40,16 @@ final class Request
     }
 
     /**
+     * @throws JsonException
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    public function get(string $endpointPath) : array
+    {
+        return $this->makeRequest(__FUNCTION__, $endpointPath);
+    }
+
+    /**
      * @template T
      * @param class-string<T> $endpointClass
      * @return T
