@@ -32,8 +32,7 @@ final class Request
         Client $httpClient,
         string $apiUrl,
         string $apiKey
-    )
-    {
+    ) {
         $this->httpClient = $httpClient;
         $this->apiUrl = $apiUrl;
         $this->apiKey = $apiKey;
@@ -155,8 +154,7 @@ final class Request
         string            $endpointPath,
         array             $requestOptions = [],
         ?PaginationOption $paginationOption = null
-    )
-    {
+    ) {
         $mergedRequestOptions = array_merge_recursive(
             [
                 RequestOptions::AUTH => [self::API_USER, $this->apiKey],
@@ -181,11 +179,12 @@ final class Request
             ))->setResponse($response);
         }
 
-        return (array)Json::decode($response->getBody()->getContents(), Json::FORCE_ARRAY);
+        return (array)Json::decode($response->getBody()->getContents(), forceArrays: true);
     }
 
     /**
      * @template T
+     * @param 'get'|'post'|'put'|'patch'|'delete' $method
      * @param class-string<T> $endpointClass
      * @return T
      * @throws JsonException
@@ -198,8 +197,7 @@ final class Request
         string            $endpointClass,
         array             $requestOptions = [],
         ?PaginationOption $paginationOption = null
-    )
-    {
+    ) {
         $returnArray = $this->makeRequest($method, $endpointPath, $requestOptions, $paginationOption);
 
         return new $endpointClass($returnArray);

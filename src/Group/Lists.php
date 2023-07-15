@@ -76,7 +76,8 @@ final class Lists
     {
         try {
             return $this->apiRequest->getTyped($this->getListEndpointPath($listId), ListItem::class);
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
     }
@@ -89,7 +90,8 @@ final class Lists
     {
         try {
             return $this->apiRequest->getTyped($this->getMemberEndpointPath($listId), EntityMemberLists::class, $paginationOption);
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
     }
@@ -127,7 +129,8 @@ final class Lists
     {
         try {
             return $this->apiRequest->getTyped($this->getOneMemberEndpointPath($listId, $memberHash), MemberItem::class);
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberHash}' not found in the list '{$listId}'", $clientException);
         }
     }
@@ -147,7 +150,8 @@ final class Lists
                 $memberItem->toArray(),
                 MemberItem::class
             );
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
         }
     }
@@ -167,7 +171,8 @@ final class Lists
                 $memberItem->getUpdated(),
                 MemberItem::class
             );
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into list '{$memberItem->list_id}'", $clientException);
         }
     }
@@ -181,9 +186,11 @@ final class Lists
     {
         try {
             return $this->apiRequest->delete($this->getOneMemberEndpointPath($memberItem->list_id, $memberItem->id));
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not found in the list '{$memberItem->list_id}'", $clientException);
-        } catch (RequestException $requestException) {
+        }
+        catch (RequestException $requestException) {
             if ($requestException->getCode() === 204) {
                 return null;
             }
@@ -201,9 +208,11 @@ final class Lists
     {
         try {
             return $this->apiRequest->post($this->getDeleteOneMemberPermanentEndpointPath($memberItem->list_id, $memberItem->id), []);
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new MemberNotFoundException("Member '{$memberItem->id}' not found in the list '{$memberItem->list_id}'", $clientException);
-        } catch (RequestException $requestException) {
+        }
+        catch (RequestException $requestException) {
             if ($requestException->getCode() === 204) {
                 return null;
             }
@@ -220,7 +229,8 @@ final class Lists
     {
         try {
             return $this->apiRequest->getTyped($this->getSegmentEndpointPath($listId), EntitySegmentLists::class, $paginationOption);
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new ListNotFoundException("List '{$listId}' not found", $clientException);
         }
     }
@@ -258,7 +268,8 @@ final class Lists
     {
         try {
             return $this->apiRequest->getTyped($this->getOneSegmentEndpointPath($listId, $segmentId), Segment::class);
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new ListNotFoundException("Segment '{$segmentId}' not found in the list '{$listId}'", $clientException);
         }
     }
@@ -283,7 +294,8 @@ final class Lists
                 ],
                 Segment::class
             );
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             throw new ListNotFoundException("Segment '{$segmentName}' not created in the list '{$listId}'", $clientException);
         }
     }
@@ -303,7 +315,8 @@ final class Lists
                 ],
                 MemberItem::class
             );
-        } catch (ClientException $clientException) {
+        }
+        catch (ClientException $clientException) {
             \Tracy\Debugger::getLogger()->log($clientException);
             throw new MemberNotFoundException("Member '{$memberItem->id}' not added into segment '{$segmentId}'", $clientException);
         }

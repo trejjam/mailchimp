@@ -90,7 +90,8 @@ final class MailChimpExtension extends CompilerExtension
                 GuzzleHttp\Client::class,
                 $http->clientFactory
             );
-        } else {
+        }
+        else {
             $httpClient = $builder->addDefinition($this->prefix('http.client'))->setType(GuzzleHttp\Client::class);
         }
 
@@ -146,7 +147,8 @@ final class MailChimpExtension extends CompilerExtension
             $factoryDefinition = $builder->addDefinition($this->prefix($name));
 
             $factoryDefinition->setFactory($factory);
-        } else {
+        }
+        else {
             $this->loadDefinitionsFromConfig([
                 $name => $factory,
             ]);
