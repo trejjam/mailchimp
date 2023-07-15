@@ -157,5 +157,5 @@ final class DITest extends TestCase
     }
 }
 
-$test = new DITest($container);
+$test = new DITest();
 $test->run();

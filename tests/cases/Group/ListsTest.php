@@ -17,14 +17,9 @@ final class ListsTest extends TestCase
 {
     private const TEST_LIST = 'testList';
 
-    /**
-     * @var Container
-     */
-    private $container;
-
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly Container $container
+    ) {
     }
 
     public function testGetAll() : void
