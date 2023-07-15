@@ -26,15 +26,11 @@ return static function (ECSConfig $ecsConfig) use ($rootDir) : void {
 
     $ecsConfig->import($rootDir . 'vendor/symplify/easy-coding-standard/config/set/psr12.php');
 
-    $parameters = $ecsConfig->parameters();
-
-    $parameters->set(Option::INDENTATION, Option::INDENTATION_SPACES);
-
-    $parameters->set(Option::SKIP, [
+    $ecsConfig->indentation(Option::INDENTATION_SPACES);
+    $ecsConfig->skip([
         BlankLineAfterOpeningTagFixer::class => null,
         BracesFixer::class => null,
         BinaryOperatorSpacesFixer::class => null,
-        ScopeIndentSniff::class => null,
     ]);
 
     $ecsConfig->ruleWithConfiguration(ReturnTypeDeclarationFixer::class, [
