@@ -5,19 +5,10 @@ namespace Trejjam\MailChimp;
 
 final class PaginationOption
 {
-    /**
-     * @var int
-     */
-    private $offset;
-    /**
-     * @var int
-     */
-    private $count;
-
-    public function __construct(int $offset = 0, int $count = 10)
-    {
-        $this->offset = $offset;
-        $this->count = $count;
+    public function __construct(
+        private int $offset = 0,
+        private int $count = 10
+    ) {
     }
 
     public function getOffset() : int

@@ -9,14 +9,9 @@ use Trejjam\MailChimp\Request;
 
 final class Root
 {
-    /**
-     * @var Request
-     */
-    private $apiRequest;
-
-    public function __construct(Request $apiRequest)
-    {
-        $this->apiRequest = $apiRequest;
+    public function __construct(
+        private readonly Request $apiRequest
+    ) {
     }
 
     /**

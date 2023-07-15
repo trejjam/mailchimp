@@ -15,27 +15,11 @@ final class Request
     public const VERSION = '3.0';
     public const API_USER = 'apikey';
 
-    /**
-     * @var Client
-     */
-    private $httpClient;
-    /**
-     * @var string
-     */
-    private $apiUrl;
-    /**
-     * @var string
-     */
-    private $apiKey;
-
     public function __construct(
-        Client $httpClient,
-        string $apiUrl,
-        string $apiKey
+        private readonly Client $httpClient,
+        private readonly string $apiUrl,
+        private readonly string $apiKey
     ) {
-        $this->httpClient = $httpClient;
-        $this->apiUrl = $apiUrl;
-        $this->apiKey = $apiKey;
     }
 
     /**

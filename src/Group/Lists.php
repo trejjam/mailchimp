@@ -25,14 +25,9 @@ final class Lists
     private const GROUP_SEGMENT_PREFIX = '/segments';
     private const SEGMENT_NAME_MAX_LENGTH = 100;
 
-    /**
-     * @var Request
-     */
-    private $apiRequest;
-
-    public function __construct(Request $apiRequest)
-    {
-        $this->apiRequest = $apiRequest;
+    public function __construct(
+        private readonly Request $apiRequest
+    ) {
     }
 
     /**
@@ -289,7 +284,7 @@ final class Lists
             return $this->apiRequest->postTyped(
                 $this->getSegmentEndpointPath($listId),
                 [
-                    'name'           => $segmentName,
+                    'name' => $segmentName,
                     'static_segment' => [],
                 ],
                 Segment::class
@@ -311,7 +306,7 @@ final class Lists
                 $this->getOneSegmentEndpointPath($memberItem->list_id, $segmentId) . self::GROUP_MEMBER_PREFIX,
                 [
                     'email_address' => $memberItem->email_address,
-                    'status'        => 'subscribed',
+                    'status' => 'subscribed',
                 ],
                 MemberItem::class
             );

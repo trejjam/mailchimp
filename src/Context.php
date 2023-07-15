@@ -8,21 +8,10 @@ use Trejjam\MailChimp\Group\Root;
 
 final class Context
 {
-    /**
-     * @var Root
-     */
-    private $root;
-    /**
-     * @var Lists
-     */
-    private $lists;
-
     public function __construct(
-        Root $root,
-        Lists $lists
+        private readonly Root $root,
+        private readonly Lists $lists
     ) {
-        $this->root = $root;
-        $this->lists = $lists;
     }
 
     public function getRootGroup() : Root
