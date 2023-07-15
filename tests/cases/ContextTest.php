@@ -25,11 +25,9 @@ final class ContextTest extends Tester\TestCase
 
         $rootResponse = $mailchimpContext->getRootGroup()->get();
 
-        Assert::type(MailChimp\Entity\Root::class, $rootResponse);
+        Assert::equal('account_id', $rootResponse->account_id);
 
         $listsResponse = $mailchimpContext->getListsGroup()->getAll();
-
-        Assert::type(MailChimp\Entity\Lists\Lists::class, $listsResponse);
     }
 }
 

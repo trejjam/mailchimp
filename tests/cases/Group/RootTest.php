@@ -24,12 +24,10 @@ final class RootTest extends Tester\TestCase
         Assert::type(MailChimp\Group\Root::class, $groupRoot);
 
         $rootEntity = $groupRoot->get();
-        Assert::type(MailChimp\Entity\Root::class, $rootEntity);
         Assert::notSame('', $rootEntity->last_login);
 
         $contactEntity = $rootEntity->getContact();
-        Assert::type(MailChimp\Entity\Contact::class, $contactEntity);
-        Assert::notSame(null, $contactEntity->company);
+        Assert::notNull($contactEntity->company);
     }
 }
 

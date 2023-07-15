@@ -7,6 +7,7 @@ use Composer\CaBundle\CaBundle;
 use GuzzleHttp;
 use Nette\DI\Compiler;
 use Nette\DI\Definitions\Reference;
+use Nette\DI\Definitions\ServiceDefinition;
 use Tester\Assert;
 use Tester\TestCase;
 use Trejjam\MailChimp\DI\MailChimpExtension;
@@ -23,35 +24,33 @@ final class DITest extends TestCase
 
         $compiler = new Compiler();
         $compiler->addExtension(self::NAME, $mailChimpExtension);
-        $compiler->addConfig(
-            [
-                self::NAME => [
-                    'apiKey'   => 'someApiKey123-us11',
-                    'lists'    => [
-                        'newsletter' => 'foo123',
-                        'user'       => '123',
-                    ],
-                    'segments' => [
-                        'newsletter' => [
-                            'segmentA' => 2,
-                        ],
+        $compiler->addConfig([
+            self::NAME => [
+                'apiKey' => 'someApiKey123-us11',
+                'lists' => [
+                    'newsletter' => 'foo123',
+                    'user' => '123',
+                ],
+                'segments' => [
+                    'newsletter' => [
+                        'segmentA' => 2,
                     ],
                 ],
-            ]
-        );
+            ],
+        ]);
         $compiler->processExtensions();
 
-        $mailChimpConfig = $mailChimpExtension->getConfig();
+        $mailChimpConfig = (array)$mailChimpExtension->getConfig();
 
-        Assert::same(true, $mailChimpConfig->findDataCenter);
-        Assert::same('https://us11.api.mailchimp.com/3.0/', $mailChimpConfig->apiUrl);
-        Assert::same('someApiKey123-us11', $mailChimpConfig->apiKey);
+        Assert::same(true, $mailChimpConfig['findDataCenter']);
+        Assert::same('https://us11.api.mailchimp.com/3.0/', $mailChimpConfig['apiUrl']);
+        Assert::same('someApiKey123-us11', $mailChimpConfig['apiKey']);
         Assert::same(
             [
                 'newsletter' => 'foo123',
-                'user'       => '123',
+                'user' => '123',
             ],
-            $mailChimpConfig->lists
+            $mailChimpConfig['lists']
         );
         Assert::same(
             [
@@ -59,12 +58,12 @@ final class DITest extends TestCase
                     'segmentA' => 2,
                 ],
             ],
-            $mailChimpConfig->segments
+            $mailChimpConfig['segments']
         );
-        Assert::null($mailChimpConfig->http->clientFactory);
+        Assert::null($mailChimpConfig['http']->clientFactory);
         Assert::same([
             'verify' => CaBundle::getSystemCaRootBundlePath(),
-        ], $mailChimpConfig->http->client);
+        ], $mailChimpConfig['http']->client);
     }
 
     public function testGuzzleFactory() : void
@@ -77,7 +76,7 @@ final class DITest extends TestCase
             [
                 self::NAME => [
                     'apiKey' => 'someApiKey123-us11',
-                    'http'   => [
+                    'http' => [
                         'clientFactory' => '@guzzleClassFactory',
                     ],
                 ],
@@ -92,19 +91,21 @@ final class DITest extends TestCase
 
         $mailChimpExtension->beforeCompile();
 
-        $mailChimpConfig = $mailChimpExtension->getConfig();
+        $mailChimpConfig = (array)$mailChimpExtension->getConfig();
 
-        Assert::same(true, $mailChimpConfig->findDataCenter);
-        Assert::same('https://us11.api.mailchimp.com/3.0/', $mailChimpConfig->apiUrl);
-        Assert::same('someApiKey123-us11', $mailChimpConfig->apiKey);
-        Assert::same([], $mailChimpConfig->lists);
-        Assert::same([], $mailChimpConfig->segments);
-        Assert::same('@guzzleClassFactory', $mailChimpConfig->http->clientFactory);
+        Assert::same(true, $mailChimpConfig['findDataCenter']);
+        Assert::same('https://us11.api.mailchimp.com/3.0/', $mailChimpConfig['apiUrl']);
+        Assert::same('someApiKey123-us11', $mailChimpConfig['apiKey']);
+        Assert::same([], $mailChimpConfig['lists']);
+        Assert::same([], $mailChimpConfig['segments']);
+        Assert::same('@guzzleClassFactory', $mailChimpConfig['http']->clientFactory);
         Assert::same([
             'verify' => CaBundle::getSystemCaRootBundlePath(),
-        ], $mailChimpConfig->http->client);
+        ], $mailChimpConfig['http']->client);
 
         $httpClient = $containerBuilder->getDefinition(self::NAME . '.http.client');
+
+        Assert::type(ServiceDefinition::class, $httpClient);
 
         $httpClientServiceDefinition = $httpClient->getFactory()->getEntity();
         if ($httpClientServiceDefinition instanceof Reference) {
@@ -126,7 +127,7 @@ final class DITest extends TestCase
             [
                 self::NAME => [
                     'apiKey' => 'someApiKey123-us11',
-                    'http'   => [
+                    'http' => [
                         'clientFactory' => 'GuzzleHttp\Client([])',
                     ],
                 ],
@@ -137,20 +138,22 @@ final class DITest extends TestCase
 
         $mailChimpExtension->beforeCompile();
 
-        $mailChimpConfig = $mailChimpExtension->getConfig();
+        $mailChimpConfig = (array)$mailChimpExtension->getConfig();
 
-        Assert::same(true, $mailChimpConfig->findDataCenter);
-        Assert::same('https://us11.api.mailchimp.com/3.0/', $mailChimpConfig->apiUrl);
-        Assert::same('someApiKey123-us11', $mailChimpConfig->apiKey);
-        Assert::same([], $mailChimpConfig->lists);
-        Assert::same([], $mailChimpConfig->segments);
-        Assert::same('GuzzleHttp\Client([])', $mailChimpConfig->http->clientFactory);
+        Assert::same(true, $mailChimpConfig['findDataCenter']);
+        Assert::same('https://us11.api.mailchimp.com/3.0/', $mailChimpConfig['apiUrl']);
+        Assert::same('someApiKey123-us11', $mailChimpConfig['apiKey']);
+        Assert::same([], $mailChimpConfig['lists']);
+        Assert::same([], $mailChimpConfig['segments']);
+        Assert::same('GuzzleHttp\Client([])', $mailChimpConfig['http']->clientFactory);
         Assert::same([
             'verify' => CaBundle::getSystemCaRootBundlePath(),
-        ], $mailChimpConfig->http->client);
+        ], $mailChimpConfig['http']->client);
 
         $containerBuilder = $compiler->getContainerBuilder();
         $httpClient = $containerBuilder->getDefinition(self::NAME . '.http.client');
+
+        Assert::type(ServiceDefinition::class, $httpClient);
 
         $httpClientServiceDefinition = $httpClient->getFactory()->getEntity();
         Assert::same('GuzzleHttp\Client([])', $httpClientServiceDefinition);

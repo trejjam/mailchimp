@@ -29,7 +29,6 @@ final class ListsTest extends TestCase
         Assert::type(MailChimp\Group\Lists::class, $groupLists);
 
         $listsEntity = $groupLists->getAll();
-        Assert::type(MailChimp\Entity\Lists\Lists::class, $listsEntity);
 
         $listItems = $listsEntity->getLists();
 
@@ -38,8 +37,8 @@ final class ListsTest extends TestCase
 
             Assert::type(MailChimp\Entity\Lists\ListItem::class, $listItem);
             Assert::notSame(null, $listItem->id);
-            Assert::type(MailChimp\Entity\Contact::class, $listItem->getContact());
-            Assert::type(MailChimp\Entity\Link::class, $listItem->getLinks()[0]);
+            Assert::same('', $listItem->getContact()->country);
+            Assert::hasKey(0, $listItem->getLinks());
         }
     }
 
@@ -58,16 +57,17 @@ final class ListsTest extends TestCase
             $_listEntity = $listsEntity->getLists()[0];
 
             $listEntity = $groupLists->get($_listEntity->id);
-            Assert::type(MailChimp\Entity\Lists\ListItem::class, $listEntity);
             Assert::notSame(null, $listEntity->id);
-            Assert::type(MailChimp\Entity\Contact::class, $listEntity->getContact());
-            Assert::type(MailChimp\Entity\Link::class, $listEntity->getLinks()[0]);
+            Assert::same('', $listEntity->getContact()->country);
+            Assert::hasKey(0, $listEntity->getLinks());
         }
     }
 
     public function testGetEntityMembers() : void
     {
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
+
+        Assert::type(MailChimp\Group\Lists::class, $groupLists);
 
         Assert::throws(function () use ($groupLists) {
             $groupLists->getMembers('not_exist_id');
@@ -78,7 +78,6 @@ final class ListsTest extends TestCase
             $_listEntity = $listsEntity->getLists()[0];
 
             $listMembers = $groupLists->getMembers($_listEntity->id);
-            Assert::type(MailChimp\Entity\Lists\Member\Lists::class, $listMembers);
             Assert::type(MailChimp\Entity\Link::class, $listMembers->getLinks()[0]);
             Assert::same($_listEntity->id, $listMembers->list_id);
 
@@ -105,6 +104,9 @@ final class ListsTest extends TestCase
     {
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
         $lists = $this->container->getByType(MailChimp\Lists::class);
+
+        Assert::type(MailChimp\Group\Lists::class, $groupLists);
+        Assert::type(MailChimp\Lists::class, $lists);
 
         $testList = $lists->getListByName(self::TEST_LIST);
 
@@ -137,7 +139,6 @@ final class ListsTest extends TestCase
 
             $listMemberItem = $groupLists->getMember($_listMemberItem->list_id, $_listMemberItem->id);
 
-            Assert::type(MailChimp\Entity\Lists\Member\MemberItem::class, $listMemberItem);
             Assert::type(MailChimp\Entity\Link::class, $listMemberItem->getLinks()[0]);
         }
 
@@ -148,6 +149,9 @@ final class ListsTest extends TestCase
     {
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
         $lists = $this->container->getByType(MailChimp\Lists::class);
+
+        Assert::type(MailChimp\Group\Lists::class, $groupLists);
+        Assert::type(MailChimp\Lists::class, $lists);
 
         $testList = $lists->getListByName(self::TEST_LIST);
 
@@ -224,6 +228,8 @@ final class ListsTest extends TestCase
     {
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
 
+        Assert::type(MailChimp\Group\Lists::class, $groupLists);
+
         Assert::throws(function () use ($groupLists) {
             $groupLists->getSegments('not_exist_id');
         }, ListNotFoundException::class);
@@ -233,7 +239,6 @@ final class ListsTest extends TestCase
             $_listEntity = $listsEntity->getLists()[0];
 
             $listSegments = $groupLists->getSegments($_listEntity->id);
-            Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
             Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()[0]);
             Assert::same($_listEntity->id, $listSegments->list_id);
 
@@ -258,21 +263,21 @@ final class ListsTest extends TestCase
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
         $lists = $this->container->getByType(MailChimp\Lists::class);
 
+        Assert::type(MailChimp\Group\Lists::class, $groupLists);
+        Assert::type(MailChimp\Lists::class, $lists);
+
         $testList = $lists->getListByName(self::TEST_LIST);
 
         $listSegments = $groupLists->getSegments($testList);
-        Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
         Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()[0]);
         Assert::same($testList, $listSegments->list_id);
 
         $segmentName = 'Test segment - ' . Random::generate(10);
 
         $segment = $groupLists->addSegment($testList, $segmentName);
-        Assert::type(MailChimp\Entity\Lists\Segment\Segment::class, $segment);
         Assert::same($segmentName, $segment->name);
 
         $segmentFetch = $groupLists->getSegment($testList, $segment->id);
-        Assert::type(MailChimp\Entity\Lists\Segment\Segment::class, $segmentFetch);
         Assert::same($segmentName, $segmentFetch->name);
         Assert::same($segment->type, $segmentFetch->type);
         Assert::same($segment->created_at, $segmentFetch->created_at);
@@ -283,10 +288,12 @@ final class ListsTest extends TestCase
         $groupLists = $this->container->getByType(MailChimp\Group\Lists::class);
         $lists = $this->container->getByType(MailChimp\Lists::class);
 
+        Assert::type(MailChimp\Group\Lists::class, $groupLists);
+        Assert::type(MailChimp\Lists::class, $lists);
+
         $testList = $lists->getListByName(self::TEST_LIST);
 
         $listSegments = $groupLists->getSegments($testList);
-        Assert::type(MailChimp\Entity\Lists\Segment\Lists::class, $listSegments);
         Assert::type(MailChimp\Entity\Link::class, $listSegments->getLinks()[0]);
         Assert::same($testList, $listSegments->list_id);
 
