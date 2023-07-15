@@ -21,7 +21,7 @@ if (!file_exists($logDir)) {
     @mkdir($logDir, 0777, true);
 }
 
-$configurator = new Nette\Configurator;
+$configurator = new Nette\Bootstrap\Configurator;
 $configurator->setDebugMode(true);
 Tracy\Debugger::$logDirectory = $logDir;
 //$configurator->enableDebugger($logDir);
@@ -35,9 +35,9 @@ $configurator->addConfig(__DIR__ . '/config/config.neon');
 if (file_exists(__DIR__ . '/config/config.local.neon')) {
     $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 }
-$configurator->addParameters([
+$configurator->addStaticParameters([
     'ENV' => array_filter(getenv(), function (string $key): bool {
-        return Nette\Utils\Strings::startsWith($key, 'MAILCHIMP_');
+        return str_starts_with($key, 'MAILCHIMP_');
     }, ARRAY_FILTER_USE_KEY),
 ]);
 
