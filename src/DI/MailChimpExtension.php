@@ -64,10 +64,7 @@ final class MailChimpExtension extends CompilerExtension
     public function loadConfiguration() : void
     {
         $http = $this->config->http;
-        if ($http->caChain === null && method_exists(
-            'Composer\CaBundle\CaBundle',
-            'getSystemCaRootBundlePath'
-        )) {
+        if ($http->caChain === null) {
             $http->caChain = Composer\CaBundle\CaBundle::getSystemCaRootBundlePath();
         }
 
@@ -107,7 +104,7 @@ final class MailChimpExtension extends CompilerExtension
             ])
             ->setAutowired(false);
 
-        $builder->getDefinition($this->prefix('request'))
+        $builder->addDefinition($this->prefix('request'))
             ->setType(MailChimp\Request::class)
             ->setArguments(
                 [
@@ -117,14 +114,14 @@ final class MailChimpExtension extends CompilerExtension
                 ]
             );
 
-        $builder->getDefinition($this->prefix('context'))
+        $builder->addDefinition($this->prefix('context'))
             ->setType(MailChimp\Context::class);
-        $builder->getDefinition($this->prefix('group.root'))
+        $builder->addDefinition($this->prefix('group.root'))
             ->setType(MailChimp\Group\Root::class);
-        $builder->getDefinition($this->prefix('group.lists'))
+        $builder->addDefinition($this->prefix('group.lists'))
             ->setType(MailChimp\Group\Lists::class);
 
-        $builder->getDefinition($this->prefix('lists'))
+        $builder->addDefinition($this->prefix('lists'))
             ->setType(MailChimp\Lists::class)
             ->setArguments(
                 [
@@ -132,7 +129,7 @@ final class MailChimpExtension extends CompilerExtension
                 ]
             );
 
-        $builder->getDefinition($this->prefix('segments'))
+        $builder->addDefinition($this->prefix('segments'))
             ->setType(MailChimp\Segments::class)
             ->setArguments(
                 [
