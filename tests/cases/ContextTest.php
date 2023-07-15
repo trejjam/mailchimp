@@ -14,7 +14,7 @@ final class ContextTest extends Tester\TestCase
 {
     private $container;
 
-    function __construct(Nette\DI\Container $container)
+    public function __construct(Nette\DI\Container $container)
     {
         $this->container = $container;
     }

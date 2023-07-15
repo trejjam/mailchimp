@@ -8,8 +8,8 @@ use Nette\Utils\Random;
 use Tester\Assert;
 use Tester\TestCase;
 use Trejjam\MailChimp;
-use Trejjam\MailChimp\Exception\MemberNotFoundException;
 use Trejjam\MailChimp\Exception\ListNotFoundException;
+use Trejjam\MailChimp\Exception\MemberNotFoundException;
 
 $container = require __DIR__ . '/../../bootstrap.php';
 
@@ -22,7 +22,7 @@ final class ListsTest extends TestCase
      */
     private $container;
 
-    function __construct(Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
@@ -203,19 +203,19 @@ final class ListsTest extends TestCase
 
         $groupLists->removeMember($memberItemGet1);
         $groupLists->getMember($testList, $memberItem2->id);
-		$memberItem1Archived = $groupLists->getMember($memberItem1->list_id, $memberItem1->id);
-		Assert::equal("archived", $memberItem1Archived->status);
+        $memberItem1Archived = $groupLists->getMember($memberItem1->list_id, $memberItem1->id);
+        Assert::equal('archived', $memberItem1Archived->status);
 
-		$groupLists->removePermanentMember($memberItemGet1);
+        $groupLists->removePermanentMember($memberItemGet1);
         Assert::throws(function () use ($groupLists, $memberItem1) {
             $groupLists->getMember($memberItem1->list_id, $memberItem1->id);
         }, MemberNotFoundException::class, "Member '{$memberItem1->id}' not found in the list '{$memberItem1->list_id}'");
 
         $groupLists->removeMember($memberItemGet2);
-		$memberItem2Archived = $groupLists->getMember($memberItemGet2->list_id, $memberItemGet2->id);
-		Assert::equal("archived", $memberItem2Archived->status);
+        $memberItem2Archived = $groupLists->getMember($memberItemGet2->list_id, $memberItemGet2->id);
+        Assert::equal('archived', $memberItem2Archived->status);
 
-		$groupLists->removePermanentMember($memberItemGet2);
+        $groupLists->removePermanentMember($memberItemGet2);
         Assert::throws(function () use ($groupLists, $memberItem1) {
             $groupLists->getMember($memberItem1->list_id, $memberItem1->id);
         }, MemberNotFoundException::class, "Member '{$memberItem1->id}' not found in the list '{$memberItem1->list_id}'");
