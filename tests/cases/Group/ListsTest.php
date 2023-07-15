@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Trejjam\MailChimp\Tests\Group;
+namespace Trejjam\MailChimp\Tests\Cases\Group;
 
 use Nette\DI\Container;
 use Nette\Utils\Random;

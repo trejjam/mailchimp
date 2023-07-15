@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Trejjam\MailChimp\Tests;
+namespace Trejjam\MailChimp\Cases\Tests;
 
 use Nette;
 use Tester;

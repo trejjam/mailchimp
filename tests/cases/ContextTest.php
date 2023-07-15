@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Trejjam\MailChimp\Tests;
+namespace Trejjam\MailChimp\Cases\Tests;
 
 use Nette;
 use Tester;
@@ -23,7 +23,6 @@ final class ContextTest extends Tester\TestCase
 
         Assert::type(MailChimp\Context::class, $mailchimpContext);
 
-        /** @var MailChimp\Entity\Root $rootResponse */
         $rootResponse = $mailchimpContext->getRootGroup()->get();
 
         Assert::type(MailChimp\Entity\Root::class, $rootResponse);
