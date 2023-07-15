@@ -31,8 +31,10 @@
 		"nette/tester": "^2.5",
 
 		"phpstan/phpstan": "^1.10",
+		"phpstan/extension-installer": "^1.2",
 		"phpstan/phpstan-deprecation-rules": "^1.1",
 		"phpstan/phpstan-strict-rules": "^1.5",
+		"nepada/phpstan-nette-tester": "^1.0",
 		"thecodingmachine/phpstan-safe-rule": "^1.2",
 		"roave/no-floaters": "^1.9",
 
@@ -47,13 +49,17 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Trejjam\\MailChimp\\Tests\\": "tests/src/"
+			"Trejjam\\MailChimp\\Tests\\": "tests/src/",
+			"Trejjam\\MailChimp\\Tests\\Cases\\": "tests/cases/"
 		}
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"config": {
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
 	},
 	"extra": {
 		"branch-alias": {
