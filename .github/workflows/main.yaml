@@ -239,8 +239,9 @@ jobs:
         uses: "shivammathur/setup-php@2.25.4"
         with:
           php-version: "${{ matrix.php-version }}"
-          extensions: "${{ env.extensions }}"
+          extensions: "${{ env.extensions }} pcov"
           tools: "composer:${{ env.composer-version }} "
+          coverage: pcov
 
       - name: "Setup problem matchers for PHP"
         run: 'echo "::add-matcher::${{ runner.tool_cache }}/php.json"'

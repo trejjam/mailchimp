@@ -24,7 +24,7 @@ ecsFix:
 	$(MAKE) ECS_PARAM="--fix" ecs
 
 coverage-clover:
-	XDEBUG_CONFIG="remote_enable=0" vendor/bin/tester -s -p phpdbg --colors 1 -C --coverage ./coverage.xml --coverage-src ./src ./tests/cases/
+	XDEBUG_CONFIG="remote_enable=0" vendor/bin/tester -s -p php -d pcov.enabled=1 --colors 1 -C --coverage ./coverage.xml --coverage-src ./src ./tests/cases/
 
 coverage-html:
 	XDEBUG_CONFIG="remote_enable=0" vendor/bin/tester -s -p phpdbg --colors 1 -C --coverage ./coverage.html --coverage-src ./src ./tests/cases/
