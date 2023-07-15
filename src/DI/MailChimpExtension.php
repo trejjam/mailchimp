@@ -58,6 +58,8 @@ final class MailChimpExtension extends CompilerExtension
             foreach (array_keys($config->segments) as $listName) {
                 Validators::assertField($config->lists, $listName);
             }
+
+            return true;
         });
     }
 
@@ -66,6 +68,10 @@ final class MailChimpExtension extends CompilerExtension
         $http = $this->config->http;
         if ($http->caChain === null) {
             $http->caChain = Composer\CaBundle\CaBundle::getSystemCaRootBundlePath();
+        }
+
+        if ($http->caChain !== null && !array_key_exists('verify', $http->client)) {
+            $http->client['verify'] = $http->caChain;
         }
 
         if ($this->config->findDataCenter === true) {
@@ -93,10 +99,6 @@ final class MailChimpExtension extends CompilerExtension
         }
         else {
             $httpClient = $builder->addDefinition($this->prefix('http.client'))->setType(GuzzleHttp\Client::class);
-        }
-
-        if ($http->caChain !== null && !array_key_exists('verify', $http->client)) {
-            $http->client['verify'] = $http->caChain;
         }
 
         $httpClient
