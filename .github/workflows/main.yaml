@@ -142,10 +142,10 @@ jobs:
         operating-system: ["ubuntu-latest"]
         composer-args: [ "" ]
         include:
-          - php-version: "7.4"
+          - php-version: "8.1"
             operating-system: "ubuntu-latest"
             composer-args: "--prefer-lowest"
-          - php-version: "8.1"
+          - php-version: "8.3"
             operating-system: "ubuntu-latest"
             composer-args: "--ignore-platform-reqs"
       fail-fast: false
