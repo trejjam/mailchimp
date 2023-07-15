@@ -37,7 +37,7 @@ final class ListsTest extends TestCase
 
             Assert::type(MailChimp\Entity\Lists\ListItem::class, $listItem);
             Assert::notSame(null, $listItem->id);
-            Assert::same('', $listItem->getContact()->country);
+            Assert::same('CZ', $listItem->getContact()->country);
             Assert::hasKey(0, $listItem->getLinks());
         }
     }
@@ -58,7 +58,7 @@ final class ListsTest extends TestCase
 
             $listEntity = $groupLists->get($_listEntity->id);
             Assert::notSame(null, $listEntity->id);
-            Assert::same('', $listEntity->getContact()->country);
+            Assert::same('CZ', $listEntity->getContact()->country);
             Assert::hasKey(0, $listEntity->getLinks());
         }
     }

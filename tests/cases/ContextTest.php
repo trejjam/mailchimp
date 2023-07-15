@@ -25,9 +25,11 @@ final class ContextTest extends Tester\TestCase
 
         $rootResponse = $mailchimpContext->getRootGroup()->get();
 
-        Assert::equal('account_id', $rootResponse->account_id);
+        Assert::equal('a78864d090bae6d8d8b45ca82', $rootResponse->account_id);
 
         $listsResponse = $mailchimpContext->getListsGroup()->getAll();
+
+        Assert::hasKey(0, $listsResponse->getLists());
     }
 }
 
