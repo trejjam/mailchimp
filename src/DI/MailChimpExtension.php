@@ -55,8 +55,8 @@ final class MailChimpExtension extends CompilerExtension
 
             return $config;
         })->assert(function ($config) {
-            foreach (array_keys($config['segments']) as $listName) {
-                Validators::assertField($config['lists'], $listName);
+            foreach (array_keys($config->segments) as $listName) {
+                Validators::assertField($config->lists, $listName);
             }
         });
     }
