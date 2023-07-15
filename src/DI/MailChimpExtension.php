@@ -42,7 +42,7 @@ final class MailChimpExtension extends CompilerExtension
             'segments' => Expect::anyOf(
                 Expect::arrayOf(Expect::arrayOf(Expect::string())),
                 Expect::arrayOf(Expect::arrayOf(Expect::int()))
-            ),
+            )->default([]),
             'http' => Expect::structure([
                 'clientFactory' => Expect::anyOf(Expect::string(), Expect::array(), Expect::type(Statement::class))->nullable(),
                 'caChain' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
