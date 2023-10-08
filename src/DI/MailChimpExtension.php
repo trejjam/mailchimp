@@ -8,6 +8,7 @@ use GuzzleHttp;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\DI\Definitions\Statement;
+use Nette\PhpGenerator\Literal;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Nette\Utils\Strings;
@@ -46,7 +47,7 @@ final class MailChimpExtension extends CompilerExtension
             'http' => Expect::structure([
                 'clientFactory' => Expect::anyOf(Expect::string(), Expect::array(), Expect::type(Statement::class))->nullable(),
                 'caChain' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
-                'client' => Expect::array()->default([]),
+                'client' => Expect::array()->dynamic()->default([]),
             ]),
         ])->before(function ($config) {
             if ($config['findDataCenter'] ?? self::findDataCenter) {
@@ -70,7 +71,12 @@ final class MailChimpExtension extends CompilerExtension
             $http->caChain = Composer\CaBundle\CaBundle::getSystemCaRootBundlePath();
         }
 
-        if ($http->caChain !== null && !array_key_exists('verify', $http->client)) {
+        if ($http->client instanceof Literal) {
+            $http->client = new Literal(
+                "array_merge(['verify' => '{$http->caChain}'], {$http->client})"
+            );
+        }
+        elseif ($http->caChain !== null && !array_key_exists('verify', $http->client)) {
             $http->client['verify'] = $http->caChain;
         }
 
