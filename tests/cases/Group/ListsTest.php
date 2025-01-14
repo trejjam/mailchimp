@@ -16,10 +16,12 @@ $container = require __DIR__ . '/../../bootstrap.php';
 final class ListsTest extends TestCase
 {
     private const TEST_LIST = 'testList';
+    private Container $container;
 
     public function __construct(
-        private readonly Container $container
+        Container $container
     ) {
+        $this->container = $container;
     }
 
     public function testGetAll() : void

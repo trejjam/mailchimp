@@ -12,9 +12,12 @@ $container = require __DIR__ . '/../bootstrap.php';
 
 final class RequestTest extends Tester\TestCase
 {
+    private Nette\DI\Container $container;
+
     public function __construct(
-        private readonly Nette\DI\Container $container
+        Nette\DI\Container $container
     ) {
+        $this->container = $container;
     }
 
     public function testConfig() : void

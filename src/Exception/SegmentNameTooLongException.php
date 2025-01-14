@@ -5,8 +5,11 @@ namespace Trejjam\MailChimp\Exception;
 
 final class SegmentNameTooLongException extends \InvalidArgumentException
 {
-    public function __construct(private readonly string $segmentName)
+    private string $segmentName;
+
+    public function __construct(string $segmentName)
     {
+        $this->segmentName = $segmentName;
         parent::__construct();
     }
 

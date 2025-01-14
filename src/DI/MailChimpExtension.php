@@ -15,7 +15,7 @@ use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 use stdClass;
 use Trejjam\MailChimp;
-use function sprintf;
+use function Safe\sprintf;
 
 /**
  * Inspired by
@@ -147,11 +147,14 @@ final class MailChimpExtension extends CompilerExtension
             );
     }
 
-    private function registerFactory(string $name, string $type, string|array|Statement $factory) : ServiceDefinition
+    /**
+     * @param string|array|Statement $factory
+     */
+    private function registerFactory(string $name, string $type, $factory) : ServiceDefinition
     {
         $builder = $this->getContainerBuilder();
 
-        if (is_string($factory) && str_starts_with($factory, '@')) {
+        if (is_string($factory) && Strings::startsWith($factory, '@')) {
             $factoryDefinition = $builder->addDefinition($this->prefix($name));
 
             $factoryDefinition->setFactory($factory);

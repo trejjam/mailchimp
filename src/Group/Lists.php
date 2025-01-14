@@ -25,9 +25,12 @@ final class Lists
     private const GROUP_SEGMENT_PREFIX = '/segments';
     private const SEGMENT_NAME_MAX_LENGTH = 100;
 
+    private Request $apiRequest;
+
     public function __construct(
-        private readonly Request $apiRequest
+        Request $apiRequest
     ) {
+        $this->apiRequest = $apiRequest;
     }
 
     /**

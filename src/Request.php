@@ -15,11 +15,18 @@ final class Request
     public const VERSION = '3.0';
     public const API_USER = 'apikey';
 
+    private Client $httpClient;
+    private string $apiKey;
+    private string $apiUrl;
+
     public function __construct(
-        private readonly Client $httpClient,
-        private readonly string $apiUrl,
-        private readonly string $apiKey
+        Client $httpClient,
+        string $apiUrl,
+        string $apiKey
     ) {
+        $this->apiUrl = $apiUrl;
+        $this->httpClient = $httpClient;
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -163,7 +170,7 @@ final class Request
             ))->setResponse($response);
         }
 
-        return (array)Json::decode($response->getBody()->getContents(), forceArrays: true);
+        return (array)Json::decode($response->getBody()->getContents(), Json::FORCE_ARRAY);
     }
 
     /**

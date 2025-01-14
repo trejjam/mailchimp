@@ -6,11 +6,17 @@ namespace Trejjam\MailChimp;
 final class Lists
 {
     /**
+     * @var string[]
+     */
+    private array $lists;
+
+    /**
      * @param string[] $lists
      */
     public function __construct(
-        private readonly array $lists
+        array $lists
     ) {
+        $this->lists = $lists;
     }
 
     public function getListByName(string $name) : string

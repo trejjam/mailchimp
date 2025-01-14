@@ -8,11 +8,17 @@ use Trejjam\MailChimp\Exception\SegmentNotFoundException;
 final class Segments
 {
     /**
+     * @var string[][]
+     */
+    private $segments;
+
+    /**
      * @param string[][] $segments
      */
     public function __construct(
-        private readonly array $segments
+        array $segments
     ) {
+        $this->segments = $segments;
     }
 
     public function getSegmentInList(string $listName, string $segmentName) : string
