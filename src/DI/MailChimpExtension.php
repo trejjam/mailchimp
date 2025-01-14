@@ -47,7 +47,7 @@ final class MailChimpExtension extends CompilerExtension
             'http' => Expect::structure([
                 'clientFactory' => Expect::anyOf(Expect::string(), Expect::array(), Expect::type(Statement::class))->nullable(),
                 'caChain' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->nullable(),
-                'client' => Expect::array()->dynamic()->default([]),
+                'client' => Expect::array()->default([]),
             ]),
         ])->before(function ($config) {
             if ($config['findDataCenter'] ?? self::findDataCenter) {
