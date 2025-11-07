@@ -38,7 +38,7 @@
 		"thecodingmachine/phpstan-safe-rule": "^1.2",
 		"roave/no-floaters": "^1.9",
 
-		"symplify/easy-coding-standard": "^11.3 || ^12.0",
+		"symplify/easy-coding-standard": "^11.3 || ^12.0 || ^13.0",
 
 		"roave/security-advisories": "dev-master"
 	},
